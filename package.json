@@ -1,0 +1,22 @@
+{
+  "name": "mealee-server",
+  "version": "1.0.0",
+  "description": "Back-end of Mealee app",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/isadorabk/mealee-server.git"
+  },
+  "author": "",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/isadorabk/mealee-server/issues"
+  },
+  "homepage": "https://github.com/isadorabk/mealee-server#readme",
+  "devDependencies": {
+    "eslint": "^5.3.0"
+  }
+}
