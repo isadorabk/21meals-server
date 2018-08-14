@@ -1,0 +1,561 @@
+{
+	"info": {
+		"_postman_id": "bdc613fd-9e90-46eb-96b0-74f62bc493e0",
+		"name": "Mealee",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"_postman_id": "8d289c9d-e193-458a-84b9-f2e7af333c86",
+			"name": "User",
+			"item": [
+				{
+					"_postman_id": "3d3b53e1-7ec8-4d9a-976f-1f892aaea857",
+					"name": "Me (current user)",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {},
+						"url": {
+							"raw": "{{url}}/me",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"me"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"_postman_id": "7a2d3e59-97af-4dda-99f7-b5c7434275e3",
+					"name": "Create a new user",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"first_name\": \"Isadora\",\n\t\"last_name\": \"Bassetto Kwiatkowski\",\n\t\"email\": \"isadorabk@gmail.com\",\n\t\"password\": \"cf23df2207d99a74fbe169e3eba035e633b65d94\"\n}"
+						},
+						"url": {
+							"raw": "{{url}}/users",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"users"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"_postman_id": "4f8e9203-30d5-4d88-8e9e-1e237b21d92c",
+					"name": "Update Me (current user)",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"id\": 1,\n    \"first_name\": \"Isadora\",\n    \"last_name\": \"Kwiatkowski\",\n    \"email\": \"isadorabk@gmail.com\",\n    \"password\": \"cf23df2207d99a74fbe169e3eba035e633b65d94\"\n}"
+						},
+						"url": {
+							"raw": "{{url}}/me",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"me"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"_postman_id": "6971b331-ea1a-4a3e-910e-8943601ea13e",
+					"name": "Delete Me (current user)",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"disabled": true
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "{{url}}/me",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"me"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"_postman_id": "1a5158c9-c5d2-4d61-aec3-b20fb2fae7a5",
+			"name": "Recipe",
+			"item": [
+				{
+					"_postman_id": "60fbf8ba-42aa-4bcf-8210-7247f09009af",
+					"name": "Create a new recipe",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"user_id\": 1,\n    \"title\": \"Fettuccine in Creamy Mushroom and Sage Sauce\",\n    \"serves\": \"2\",\n    \"instructions\": \"Bring a large pot of lightly salted water to a boil. Add pasta and cook for 8 to 10 minutes, or until al dente; drain. Heat olive oil a medium saucepan over medium heat, and cook onion and garlic chopped until transparent. Stir in mushrooms, and cook until tender. Mix in heavy cream and sage. Cook and stir until thickened. Toss sauce with cooked fettucine, and season with salt and pepper to serve.\",\n    \"ingredients\": [{\n        \"ingredient_id\": 1,\n        \"measure_id\": 1,\n        \"amount\": 225\n    }, {\n        \"ingredient_id\": 2,\n        \"measure_id\": 1,\n        \"amount\": 100\n    }, {\n        \"ingredient_id\": 3,\n        \"measure_id\": 2,\n        \"amount\": 1\n    }, {\n        \"ingredient_id\": 4,\n        \"measure_id\": 3,\n        \"amount\": 0.5\n    }, {\n        \"ingredient_id\": 5,\n        \"measure_id\": 4,\n        \"amount\": 1\n    }, {\n        \"ingredient_id\": 6,\n        \"measure_id\": 2,\n        \"amount\": 1\n    }, {\n        \"ingredient_id\": 7,\n        \"measure_id\": 4,\n        \"amount\": 1\n    },  {\n        \"ingredient_id\": 8,\n        \"measure_id\": null,\n        \"amount\": null\n    },  {\n        \"ingredient_id\": 9,\n        \"measure_id\": null,\n        \"amount\": null\n    }] \n}"
+						},
+						"url": {
+							"raw": "{{url}}/recipes",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"recipes"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"_postman_id": "afab2855-086c-4e8d-949b-275627fae524",
+					"name": "Retrieve all recipes from a specific user",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"disabled": true
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"user_id\": 1,\n    \"title\": \"Fettuccine in Creamy Mushroom and Sage Sauce\",\n    \"serves\": \"2\",\n    \"instructions\": \"Bring a large pot of lightly salted water to a boil. Add pasta and cook for 8 to 10 minutes, or until al dente; drain. Heat olive oil a medium saucepan over medium heat, and cook onion and garlic chopped until transparent. Stir in mushrooms, and cook until tender. Mix in heavy cream and sage. Cook and stir until thickened. Toss sauce with cooked fettucine, and season with salt and pepper to serve.\",\n    \"ingredients\": [{\n        \"ingredient_id\": 1,\n        \"measure_id\": 1,\n        \"amount\": 225\n    }, {\n        \"ingredient_id\": 2,\n        \"measure_id\": 1,\n        \"amount\": 100\n    }, {\n        \"ingredient_id\": 3,\n        \"measure_id\": 2,\n        \"amount\": 1\n    }, {\n        \"ingredient_id\": 4,\n        \"measure_id\": 3,\n        \"amount\": 0.5\n    }, {\n        \"ingredient_id\": 5,\n        \"measure_id\": 4,\n        \"amount\": 1\n    }, {\n        \"ingredient_id\": 6,\n        \"measure_id\": 2,\n        \"amount\": 1\n    }, {\n        \"ingredient_id\": 7,\n        \"measure_id\": 4,\n        \"amount\": 1\n    },  {\n        \"ingredient_id\": 8,\n        \"measure_id\": null,\n        \"amount\": null\n    },  {\n        \"ingredient_id\": 9,\n        \"measure_id\": null,\n        \"amount\": null\n    }] \n}"
+						},
+						"url": {
+							"raw": "{{url}}/recipes",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"recipes"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"_postman_id": "9084a053-efb8-4f64-abb2-5eb4c9383a99",
+					"name": "Retrieve one specific recipe",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"disabled": true
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"user_id\": 1,\n    \"title\": \"Fettuccine in Creamy Mushroom and Sage Sauce\",\n    \"serves\": \"2\",\n    \"instructions\": \"Bring a large pot of lightly salted water to a boil. Add pasta and cook for 8 to 10 minutes, or until al dente; drain. Heat olive oil a medium saucepan over medium heat, and cook onion and garlic chopped until transparent. Stir in mushrooms, and cook until tender. Mix in heavy cream and sage. Cook and stir until thickened. Toss sauce with cooked fettucine, and season with salt and pepper to serve.\",\n    \"ingredients\": [{\n        \"ingredient_id\": 1,\n        \"measure_id\": 1,\n        \"amount\": 225\n    }, {\n        \"ingredient_id\": 2,\n        \"measure_id\": 1,\n        \"amount\": 100\n    }, {\n        \"ingredient_id\": 3,\n        \"measure_id\": 2,\n        \"amount\": 1\n    }, {\n        \"ingredient_id\": 4,\n        \"measure_id\": 3,\n        \"amount\": 0.5\n    }, {\n        \"ingredient_id\": 5,\n        \"measure_id\": 4,\n        \"amount\": 1\n    }, {\n        \"ingredient_id\": 6,\n        \"measure_id\": 2,\n        \"amount\": 1\n    }, {\n        \"ingredient_id\": 7,\n        \"measure_id\": 4,\n        \"amount\": 1\n    },  {\n        \"ingredient_id\": 8,\n        \"measure_id\": null,\n        \"amount\": null\n    },  {\n        \"ingredient_id\": 9,\n        \"measure_id\": null,\n        \"amount\": null\n    }] \n}"
+						},
+						"url": {
+							"raw": "{{url}}/recipes/1",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"recipes",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"_postman_id": "b4ba2bcb-ef2e-4a8d-a0c2-970d31ce65df",
+					"name": "Update a specific recipe",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"user_id\": 1,\n    \"title\": \"Fettuccine in Creamy Mushroom and Sage Sauce\",\n    \"serves\": \"2\",\n    \"instructions\": \"Bring a large pot of lightly salted water to a boil. Add pasta and cook for 8 to 10 minutes, or until al dente; drain. Heat olive oil a medium saucepan over medium heat, and cook onion and garlic chopped until transparent. Stir in mushrooms, and cook until tender. Mix in heavy cream and sage. Cook and stir until thickened. Toss sauce with cooked fettucine, and season with salt and pepper to serve.\",\n    \"photo\": \"https://static1.squarespace.com/static/5677430b69a91ad1510c421c/t/59ca5daff9a61eef0a3785a6/1506434487912/Mushroom+Spinach+Sage+Pasta%284%29.jpg\",\n    \"ingredients\": [{\n        \"ingredient_id\": 1,\n        \"measure_id\": 1,\n        \"amount\": 225\n    }, {\n        \"ingredient_id\": 2,\n        \"measure_id\": 1,\n        \"amount\": 100\n    }, {\n        \"ingredient_id\": 3,\n        \"measure_id\": 2,\n        \"amount\": 1\n    }, {\n        \"ingredient_id\": 4,\n        \"measure_id\": 3,\n        \"amount\": 1\n    }, {\n        \"ingredient_id\": 5,\n        \"measure_id\": 4,\n        \"amount\": 1\n    }, {\n        \"ingredient_id\": 6,\n        \"measure_id\": 2,\n        \"amount\": 1\n    }, {\n        \"ingredient_id\": 7,\n        \"measure_id\": 4,\n        \"amount\": 1\n    },  {\n        \"ingredient_id\": 8,\n        \"measure_id\": null,\n        \"amount\": null\n    },  {\n        \"ingredient_id\": 9,\n        \"measure_id\": null,\n        \"amount\": null\n    }] \n}"
+						},
+						"url": {
+							"raw": "{{url}}/recipes/1",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"recipes",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"_postman_id": "0cd95fc6-e5d1-45f0-a334-7934fd624a79",
+					"name": "Delete a specific recipe",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"disabled": true
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "{{url}}/recipes/1",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"recipes",
+								"1"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"_postman_id": "8647d9df-5b54-4c97-a5b6-a856b5651876",
+			"name": "Ingredient",
+			"item": [
+				{
+					"_postman_id": "d4e3fc60-e66a-43ee-8f0f-f3221d33b9b5",
+					"name": "Create an ingredient",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{                \n    \"name\": \"fettuccine pasta\",\n    \"type\": \"pasta\"\n}"
+						},
+						"url": {
+							"raw": "{{url}}/ingredients",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"ingredients"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"_postman_id": "76e261bd-d983-4f8c-ae3d-b2115547d6e4",
+					"name": "Retrieve all ingredients",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"disabled": true
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{                \n    \"name\": \"fettuccine pasta\",\n    \"type\": \"pasta\"\n}"
+						},
+						"url": {
+							"raw": "{{url}}/ingredients",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"ingredients"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"_postman_id": "bf8c9dd4-045a-4a83-91a9-a0232ea5cfa0",
+			"name": "Measure",
+			"item": [
+				{
+					"_postman_id": "bd770644-f1f8-409d-b998-b0b2b982c6ff",
+					"name": "Retrieve all measures",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"disabled": true
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{                \n    \"name\": \"fettuccine pasta\",\n    \"type\": \"pasta\"\n}"
+						},
+						"url": {
+							"raw": "{{url}}/measures",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"measures"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"_postman_id": "58805219-9ae9-4b64-abda-27e65fb8f025",
+			"name": "Ingredient Type",
+			"item": [
+				{
+					"_postman_id": "8018d03d-b314-4218-b136-93914462d227",
+					"name": "Retrieve all ingredients type",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"disabled": true
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{                \n    \"name\": \"fettuccine pasta\",\n    \"type\": \"pasta\"\n}"
+						},
+						"url": {
+							"raw": "{{url}}/ingredient_type",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"ingredient_type"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"_postman_id": "aecbaa12-8740-481c-aa6f-c882d07324bb",
+			"name": "Plan",
+			"item": [
+				{
+					"_postman_id": "e2d5dfd4-ff67-4279-84e3-677fb5ded080",
+					"name": "Create a new plan",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"user_id\": 1,\n    \"name\": \"Regular work week\",\n    \"meals\": [{\n        \"weekday\": 1,\n        \"meal_type\": 3, \n        \"recipe_id\": 1\n    }, {\n        \"weekday\": 2,\n        \"meal_type\": 3, \n        \"recipe_id\": 2\n    }, {\n        \"weekday\": 3,\n        \"meal_type\": 3, \n        \"recipe_id\": 1\n    }, {\n        \"weekday\": 4,\n        \"meal_type\": 3, \n        \"recipe_id\": 2\n    }, {\n        \"weekday\": 5,\n        \"meal_type\": 3, \n        \"recipe_id\": 1\n    }, {\n        \"weekday\": 6,\n        \"meal_type\": 3, \n        \"recipe_id\": null\n    }, {\n        \"weekday\": 7,\n        \"meal_type\": 3, \n        \"recipe_id\": 2\n    }]\n}"
+						},
+						"url": {
+							"raw": "{{url}}/plans",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"plans"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"_postman_id": "c28dd3eb-402e-42fe-a3f9-92d648666ffb",
+					"name": "Retrieve all plans from a specific user",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"disabled": true
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"user_id\": 1,\n    \"title\": \"Fettuccine in Creamy Mushroom and Sage Sauce\",\n    \"serves\": \"2\",\n    \"instructions\": \"Bring a large pot of lightly salted water to a boil. Add pasta and cook for 8 to 10 minutes, or until al dente; drain. Heat olive oil a medium saucepan over medium heat, and cook onion and garlic chopped until transparent. Stir in mushrooms, and cook until tender. Mix in heavy cream and sage. Cook and stir until thickened. Toss sauce with cooked fettucine, and season with salt and pepper to serve.\",\n    \"ingredients\": [{\n        \"ingredient_id\": 1,\n        \"measure_id\": 1,\n        \"amount\": 225\n    }, {\n        \"ingredient_id\": 2,\n        \"measure_id\": 1,\n        \"amount\": 100\n    }, {\n        \"ingredient_id\": 3,\n        \"measure_id\": 2,\n        \"amount\": 1\n    }, {\n        \"ingredient_id\": 4,\n        \"measure_id\": 3,\n        \"amount\": 0.5\n    }, {\n        \"ingredient_id\": 5,\n        \"measure_id\": 4,\n        \"amount\": 1\n    }, {\n        \"ingredient_id\": 6,\n        \"measure_id\": 2,\n        \"amount\": 1\n    }, {\n        \"ingredient_id\": 7,\n        \"measure_id\": 4,\n        \"amount\": 1\n    },  {\n        \"ingredient_id\": 8,\n        \"measure_id\": null,\n        \"amount\": null\n    },  {\n        \"ingredient_id\": 9,\n        \"measure_id\": null,\n        \"amount\": null\n    }] \n}"
+						},
+						"url": {
+							"raw": "{{url}}/plans",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"plans"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"_postman_id": "df8cb0b0-0f12-470c-a2cd-b2fa228536a8",
+					"name": "Retrieve one specific plan",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"disabled": true
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"user_id\": 1,\n    \"title\": \"Fettuccine in Creamy Mushroom and Sage Sauce\",\n    \"serves\": \"2\",\n    \"instructions\": \"Bring a large pot of lightly salted water to a boil. Add pasta and cook for 8 to 10 minutes, or until al dente; drain. Heat olive oil a medium saucepan over medium heat, and cook onion and garlic chopped until transparent. Stir in mushrooms, and cook until tender. Mix in heavy cream and sage. Cook and stir until thickened. Toss sauce with cooked fettucine, and season with salt and pepper to serve.\",\n    \"ingredients\": [{\n        \"ingredient_id\": 1,\n        \"measure_id\": 1,\n        \"amount\": 225\n    }, {\n        \"ingredient_id\": 2,\n        \"measure_id\": 1,\n        \"amount\": 100\n    }, {\n        \"ingredient_id\": 3,\n        \"measure_id\": 2,\n        \"amount\": 1\n    }, {\n        \"ingredient_id\": 4,\n        \"measure_id\": 3,\n        \"amount\": 0.5\n    }, {\n        \"ingredient_id\": 5,\n        \"measure_id\": 4,\n        \"amount\": 1\n    }, {\n        \"ingredient_id\": 6,\n        \"measure_id\": 2,\n        \"amount\": 1\n    }, {\n        \"ingredient_id\": 7,\n        \"measure_id\": 4,\n        \"amount\": 1\n    },  {\n        \"ingredient_id\": 8,\n        \"measure_id\": null,\n        \"amount\": null\n    },  {\n        \"ingredient_id\": 9,\n        \"measure_id\": null,\n        \"amount\": null\n    }] \n}"
+						},
+						"url": {
+							"raw": "{{url}}/plans/1",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"plans",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"_postman_id": "2eb12142-6a3e-4158-942a-172038f5cf86",
+					"name": "Update a specific plan",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"user_id\": 1,\n    \"name\": \"Regular work week\",\n    \"meals\": [{\n        \"weekday\": 1,\n        \"meal_type\": 3, \n        \"recipe_id\": 1\n    }, {\n        \"weekday\": 2,\n        \"meal_type\": 3, \n        \"recipe_id\": 2\n    }, {\n        \"weekday\": 3,\n        \"meal_type\": 3, \n        \"recipe_id\": 1\n    }, {\n        \"weekday\": 4,\n        \"meal_type\": 3, \n        \"recipe_id\": 2\n    }, {\n        \"weekday\": 5,\n        \"meal_type\": 3, \n        \"recipe_id\": 1\n    }, {\n        \"weekday\": 6,\n        \"meal_type\": 3, \n        \"recipe_id\": null\n    }, {\n        \"weekday\": 7,\n        \"meal_type\": 3, \n        \"recipe_id\": null\n    }]\n}"
+						},
+						"url": {
+							"raw": "{{url}}/plans/1",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"plans",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"_postman_id": "b34ca5b9-3e46-44ae-94d6-0520b483f124",
+					"name": "Delete a specific plan",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"disabled": true
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "{{url}}/plans/1",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"plans",
+								"1"
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"id": "d0c348e4-81ab-4f37-9513-53b368e3a07d",
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"id": "f336a6fb-419b-4209-9857-c1a094612229",
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
+				}
+			]
+		}
+	]
+}
