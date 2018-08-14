@@ -1,7 +1,7 @@
 'use strict'
 
 require('dotenv').config();
-
+require('./db.js')();
 const koa = require('koa');
 const bodyParser = require('koa-bodyparser');
 const cors = require('@koa/cors');
