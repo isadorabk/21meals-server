@@ -2,7 +2,6 @@
 
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
-const atob = require('atob');
 const filterProps = require('../services/utils.js').filterProps;
 
 class UsersController {
@@ -70,13 +69,31 @@ class UsersController {
     } else {
       ctx.status = 404;
       ctx.body = {
-        errors: ['User does not exists.']
+        errors: ['User does not exist.']
       };
     }
   }
 
   async getUser (ctx, next) {
-    
+    if (ctx.method !== 'GET') throw new Error('Method not allowed');
+
+    const user = await this.User.findOne({
+      where: {
+        id: ctx.user.id,
+      },
+    });
+
+    if (user) {
+      ctx.body = filterProps(user.dataValues, ['id', 'email', 'first_name', 'last_name']);
+      ctx.status = 200;
+      await next();
+    } else {
+      ctx.status = 404;
+      ctx.body = {
+        errors: ['User does not exist.']
+      };
+      return;
+    }
 
   }
 }
