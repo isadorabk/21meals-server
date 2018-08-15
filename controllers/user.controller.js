@@ -26,16 +26,11 @@ class UsersController {
       if (user) {
         ctx.status = 400;
         ctx.body = {
-          errors: ['Email already exists.']
+          errors: ['User already exists.']
         };
       } else {
         user = filterProps(userData, ['email', 'first_name', 'last_name']);
-        try {
-          const hash = await bcrypt.hash(userData.password, 10);
-          user.hash_password = hash;
-        } catch (error) {
-          throw new Error('Password missing');
-        }
+        user.hash_password = await bcrypt.hash(userData.password, 10);
         let newUser = await this.User.create(user);
         ctx.body = filterProps(newUser.dataValues, ['id', 'email', 'first_name', 'last_name']);
         ctx.status = 201;
