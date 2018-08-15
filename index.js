@@ -1,4 +1,4 @@
-'use strict'
+'use strict';
 
 require('dotenv').config();
 require('./db.js')();
@@ -15,10 +15,13 @@ app
   .use(logger())
   .use(cors())
   .use(bodyParser())
-  .use(router.routes());
+  .use(router.routes())
+  .use(router.allowedMethods());
 
 // Server connection
 app.listen(PORT, (err) => {
+  // eslint-disable-next-line
   if (err) console.error('❌ Unable to connect the server: ', err);
+  // eslint-disable-next-line
   console.log(`🌍 Server listening on port ${PORT} - ${ENV} environment`);
 });
