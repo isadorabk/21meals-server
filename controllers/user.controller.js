@@ -24,7 +24,7 @@ class UsersController {
         }
       });
       if (user) {
-        ctx.status = 400;
+        ctx.status = 401;
         ctx.body = {
           errors: ['User already exists.']
         };
@@ -43,6 +43,42 @@ class UsersController {
     }
   }
 
+  async signIn (ctx, next) {
+    if (ctx.method !== 'POST') throw new Error('Method not allowed');
+    const body = ctx.request.body;
+    const user = await this.User.findOne({
+      where: {
+        email: body.email,
+      }
+    });
+    if (user) {
+      const userData = filterProps(body, ['email', 'password']);
+      const match = await bcrypt.compare(userData.password, user.dataValues.hash_password);
+      if (match) {
+        const auth_token = jwt.sign(userData, process.env.JWT_SECRET);
+        const userUpdated = await user.update({
+          auth_token: auth_token
+        });
+        ctx.body = filterProps(userUpdated.dataValues, ['id', 'email', 'auth_token']);
+        ctx.status = 200;
+      } else {
+        ctx.status = 401;
+        ctx.body = {
+          errors: ['Password is incorrect.']
+        };
+      }
+    } else {
+      ctx.status = 404;
+      ctx.body = {
+        errors: ['User does not exists.']
+      };
+    }
+  }
+
+  async getUser (ctx, next) {
+    
+
+  }
 }
 
 module.exports = UsersController;

@@ -11,8 +11,8 @@ const usersController = new UsersController(db.User);
 
 // User routes
 router
-  .post('/users', usersController.createUser);
-// .post('/sign-in', usersController.signIn);
+  .post('/users', usersController.createUser)
+  .post('/sign-in', usersController.signIn);
 // .get('/me', authMiddleware, usersController.getUser);
 
 module.exports = router;
