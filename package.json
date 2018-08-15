@@ -27,7 +27,6 @@
   },
   "dependencies": {
     "@koa/cors": "^2.2.2",
-    "atob": "^2.1.1",
     "bcrypt": "^3.0.0",
     "dotenv": "^6.0.0",
     "eslint-plugin-json": "^1.2.1",
