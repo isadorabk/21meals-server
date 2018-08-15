@@ -6,7 +6,8 @@ module.exports = (sequelize, DataTypes) => {
       allowNull: false,
       primaryKey: true,
       type: DataTypes.UUID,
-      defaultValue: DataTypes.UUIDV4
+      defaultValue: DataTypes.UUIDV4,
+      unique: true
     },
     first_name: {
       allowNull: false,
@@ -22,19 +23,23 @@ module.exports = (sequelize, DataTypes) => {
       unique: true
     },
     auth_token: {
-      type: DataTypes.STRING,
+      type: DataTypes.STRING(1023),
       unique: true
     }, 
     hash_password: {
       type: DataTypes.STRING,
       unique: true
     }
+  }, {
+    underscored: true
   });
 
-  // User.associate = function (models) {
-  //   models.db.User.hasMany(models.Recipe);
-  //   models.db.User.hasMany(models.Plan);
-  // };
+  User.associate = (models) => {
+    User.hasMany(models.Recipe, {
+      onDelete: 'CASCADE',
+    });
+    // User.hasMany(models.Plan);
+  };
 
   return User;
 };

@@ -1,4 +1,4 @@
-'use strict'
+'use strict';
 
 const Sequelize = require('sequelize');
 
@@ -14,13 +14,15 @@ const connect = () => {
   dbConnection
     .authenticate()
     .then(() => {
+      //eslint-disable-next-line
       console.log(`✅ Connection to database ${process.env.DB_NAME} at ${process.env.HOST}:${process.env.DB_PORT} has been established successfully.`);
     })
     .catch(err => {
+      //eslint-disable-next-line
       console.error('❌ Unable to connect to the database: ', err);
     });
 
   return dbConnection;
-}
+};
 
 module.exports = () => connect();
