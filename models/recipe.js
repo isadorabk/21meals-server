@@ -39,11 +39,6 @@ module.exports = (sequelize, DataTypes) => {
       onDelete: 'CASCADE',
       defaultValue: null
     });
-    Recipe.belongsToMany(models.Measure, {
-      through: 'Recipe_ingredient',
-      onDelete: 'CASCADE',
-      allowNull: false
-    });
     Recipe.belongsToMany(models.Ingredient, {
       through: 'Recipe_ingredient',
       onDelete: 'CASCADE',
