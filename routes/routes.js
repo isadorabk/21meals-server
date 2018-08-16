@@ -6,7 +6,7 @@ const authMiddleware = require('../middlewares/authorization.js');
 const db = require('../models').db;
 db.setup();
 
-const UsersController = require('../controllers/user.controller');
+const UsersController = require('../controllers/users.controller');
 const usersController = new UsersController(db.User);
 
 // User routes

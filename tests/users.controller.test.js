@@ -1,6 +1,6 @@
 'use strict';
 
-const UsersController = require('../controllers/user.controller.js');
+const UsersController = require('../controllers/users.controller.js');
 
 const mockUser = {
   findOne: async () => {

@@ -1,5 +1,4 @@
 const db = require('../models').db;
-const filterProps = require('../services/utils.js').filterProps;
 
 const authorize = async (ctx, next) => {
   const [strategy, token] = ctx.headers.authorization.split(' ');
@@ -8,7 +7,8 @@ const authorize = async (ctx, next) => {
     const user = await db.User.findOne({
       where: {
         auth_token: token
-      }
+      },
+      attributes: ['id', 'email', 'first_name', 'last_name']
     });
 
     if (!user) {
@@ -19,7 +19,7 @@ const authorize = async (ctx, next) => {
       return;
     }
 
-    ctx.user = filterProps(user.dataValues, ['id']);
+    ctx.user = user.dataValues;
     await next();
 
   } else {
