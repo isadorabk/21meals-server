@@ -11,15 +11,16 @@ module.exports = (sequelize, DataTypes) => {
     },
     title: {
       allowNull: false,
-      type: DataTypes.STRING(511)
+      type: DataTypes.STRING(511),
+      unique: true
     },
     intructions: {
-      allowNull: false,
       type: DataTypes.STRING(1023)
     },
     serves: {
       allowNull: false,
       type: DataTypes.INTEGER,
+      defaultValue: 1
     },
     photo: {
       type: DataTypes.STRING(511),
@@ -31,6 +32,22 @@ module.exports = (sequelize, DataTypes) => {
   Recipe.associate = (models) => {
     Recipe.belongsTo(models.User, {
       onDelete: 'CASCADE',
+      allowNull: false
+    });
+    Recipe.belongsToMany(models.Plan, {
+      through: 'Plan_recipe',
+      onDelete: 'CASCADE',
+      defaultValue: null
+    });
+    Recipe.belongsToMany(models.Measure, {
+      through: 'Recipe_ingredient',
+      onDelete: 'CASCADE',
+      allowNull: false
+    });
+    Recipe.belongsToMany(models.Ingredient, {
+      through: 'Recipe_ingredient',
+      onDelete: 'CASCADE',
+      allowNull: false
     });
   };
 

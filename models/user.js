@@ -27,6 +27,7 @@ module.exports = (sequelize, DataTypes) => {
       unique: true
     }, 
     hash_password: {
+      allowNull: false,
       type: DataTypes.STRING,
       unique: true
     }
@@ -37,8 +38,12 @@ module.exports = (sequelize, DataTypes) => {
   User.associate = (models) => {
     User.hasMany(models.Recipe, {
       onDelete: 'CASCADE',
+      allowNull: false
     });
-    // User.hasMany(models.Plan);
+    User.hasMany(models.Plan, {
+      onDelete: 'CASCADE',
+      allowNull: false
+    });
   };
 
   return User;
