@@ -1,27 +1,31 @@
 const db = require('../models').db;
+const jwt = require('jsonwebtoken');
 
 const authorize = async (ctx, next) => {
   const [strategy, token] = ctx.headers.authorization.split(' ');
 
   if (strategy === 'Bearer') {
-    const user = await db.User.findOne({
-      where: {
-        auth_token: token
-      },
-      attributes: ['id', 'email', 'first_name', 'last_name']
-    });
-
-    if (!user) {
-      ctx.status = 401;
-      ctx.body = {
-        errors: ['Token is incorrect.']
-      };
-      return;
+    try {
+      const tokenDecoded = jwt.verify(token, process.env.JWT_SECRET);
+      const user = await db.User.findOne({
+        where: {
+          id: tokenDecoded.id
+        },
+        attributes: ['id', 'email', 'first_name', 'last_name']
+      });
+      if (!user) {
+        ctx.status = 401;
+        ctx.body = {
+          errors: ['Token is incorrect.']
+        };
+        return;
+      }
+      ctx.user = user.dataValues;
+      await next();
+    } catch (error) {
+      //eslint-disable-next-line
+      console.error(error);
     }
-
-    ctx.user = user.dataValues;
-    await next();
-
   } else {
     ctx.status = 400;
     ctx.body = {
@@ -29,7 +33,6 @@ const authorize = async (ctx, next) => {
     };
     return;
   }
-
 };
 
 module.exports = authorize;
