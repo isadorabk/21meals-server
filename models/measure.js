@@ -19,8 +19,7 @@ module.exports = (sequelize, DataTypes) => {
   });
 
   Measure.associate = (models) => {
-    Measure.belongsToMany(models.Recipe, {
-      through: 'Recipe_ingredient',
+    Measure.hasMany(models.Recipe_ingredient, {
       onDelete: 'CASCADE'
     });
   };
