@@ -61,14 +61,12 @@ class IngredientsController {
     });
 
     if (ingredients) {
-      ctx.body = [];
-      ingredients.forEach(el => {
-        const ingredient = {
+      ctx.body = ingredients.map(el => {
+        return {
           id: el.id,
           name: el.name,
           ingredient_type: el.dataValues.Ingredient_type.dataValues.name
         };
-        ctx.body.push(ingredient);
       });
       ctx.status = 200;
     } else {
