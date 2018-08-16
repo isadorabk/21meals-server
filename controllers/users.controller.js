@@ -3,6 +3,7 @@
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const filterProps = require('../services/utils.js').filterProps;
+const db = require('../models').db;
 
 class UsersController {
   constructor (userModel) {
@@ -14,26 +15,43 @@ class UsersController {
   }
 
   async createUser (ctx, next) {
+    // Check if the method is correct
     if (ctx.method !== 'POST') throw new Error('Method not allowed');
+
     const userData = ctx.request.body;
+    
+    //Check if the request has email and password
     if (userData.email && userData.password) {
+      // Check if there's already an user with this email
       let user = await this.User.findOne({
         where: {
           email: userData.email,
         }
       });
+      // if there's already a user, send an error
       if (user) {
         ctx.status = 401;
         ctx.body = {
           errors: ['User already exists.']
         };
+        
       } else {
+        // If there's no user, create a new one
         user = filterProps(userData, ['email', 'first_name', 'last_name']);
         user.hash_password = await bcrypt.hash(userData.password, 10);
         let newUser = await this.User.create(user);
-        ctx.body = filterProps(newUser.dataValues, ['id', 'email', 'first_name', 'last_name']);
+
+        // // Create a new empty plan for the user
+        // const newPlan = await db.Plan.create({
+        //   name: 'My first plan',
+        //   user_id: newUser.dataValues.id
+        // });
+
+        ctx.body = filterProps(newUser.dataValues, ['id', 'email']);
+        // ctx.body.plan_id = newPlan.dataValues.id;
         ctx.status = 201;
       }
+      // if there's no email or password, send an error
     } else {
       ctx.status = 406;
       ctx.body = {
@@ -43,8 +61,11 @@ class UsersController {
   }
 
   async signIn (ctx, next) {
+    // Check if the method is correct
     if (ctx.method !== 'POST') throw new Error('Method not allowed');
+
     const body = ctx.request.body;
+
     const user = await this.User.findOne({
       where: {
         email: body.email,
@@ -75,19 +96,21 @@ class UsersController {
   }
 
   async getUser (ctx, next) {
+    // Check if the method is correct
     if (ctx.method !== 'GET') throw new Error('Method not allowed');
 
+    // Find an user with this email
     const user = await this.User.findOne({
       where: {
         id: ctx.user.id,
       },
     });
-
     if (user) {
       ctx.body = filterProps(user.dataValues, ['id', 'email', 'first_name', 'last_name']);
       ctx.status = 200;
       await next();
     } else {
+      // Send an error if there's no user with this email
       ctx.status = 404;
       ctx.body = {
         errors: ['User does not exist.']
