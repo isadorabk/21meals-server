@@ -55,28 +55,27 @@ class IngredientsController {
 
     // Find all ingredients
     const ingredients = await this.Ingredient.findAll({
+      attributes: ['id', 'name'],
       include: [{
-        model: db.Ingredient_type
+        model: db.Ingredient_type,
+        attributes: ['name']
       }]
     });
 
     if (ingredients) {
       ctx.body = ingredients.map(el => {
-        return {
-          id: el.id,
-          name: el.name,
-          ingredient_type: el.dataValues.Ingredient_type.dataValues.name
+        const res = {
+          ...el.dataValues,
+          ingredient_type: el.dataValues.Ingredient_type.name
         };
+        delete res.Ingredient_type;
+        return res;
       });
-      ctx.status = 200;
     } else {
-      // Send an error if there's no ingredient
-      ctx.status = 404;
-      ctx.body = {
-        errors: ['No ingredient was found.']
-      };
-      return;
+      // Send an empty array if there's no ingredient
+      ctx.body = [];
     }
+    ctx.status = 200;
   }
 }
 
