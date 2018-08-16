@@ -11,11 +11,11 @@ module.exports = (sequelize, DataTypes) => {
     },
     weekday: {
       allowNull: false,
-      type: DataTypes.INTEGER
+      type: DataTypes.STRING
     },
     meal: {
       allowNull: false,
-      type: DataTypes.INTEGER
+      type: DataTypes.STRING
     }
   }, {
     underscored: true
