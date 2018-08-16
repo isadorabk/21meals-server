@@ -1,0 +1,957 @@
+FORMAT: 1A
+HOST: http://mealee.apiblueprint.org/
+
+# Mealee
+
+Mealee is an API allowing consumers to add their recipes, create their weekly plan and get a shopping list from it.
+
+
+## Users Collection [/users]
+
+### Create a New User [POST]
+
+You may create your own user using this action. It takes a JSON object containing user's first name, last name, email and password.
+
++ Request (application/json)
+
+        {
+            "first_name": "Isadora",
+            "last_name": "Bassetto Kwiatkowski",
+            "email": "isadorabk@gmail.com",
+            "password": "cf23df2207d99a74fbe169e3eba035e633b65d94"
+        }
+
++ Response 201 (application/json)
+
+    + Headers
+
+            Location: /users/1
+
+    + Body
+
+            {
+                "id": 1,
+                "first_name": "Isadora",
+                "last_name": "Bassetto Kwiatkowski",
+                "email": "isadorabk@gmail.com",
+                "created_at": "2018-08-13T08:40:51.620Z"
+            }
+
+
+## User [/me]
+
+### Retrieve a User [GET]
+
++ Response 200 (application/json)
+
+        {
+            "id": 1,
+            "first_name": "Isadora",
+            "last_name": "Bassetto Kwiatkowski",
+            "email": "isadorabk@gmail.com",
+            "created_at": "2018-08-13T08:40:51.620Z"
+        }
+
+### Update a User [PUT]
+
++ Request (application/json)
+
+        {
+            "id": 1,
+            "first_name": "Isadora",
+            "last_name": "Kwiatkowski",
+            "email": "isadorabk@gmail.com",
+            "password": "cf23df2207d99a74fbe169e3eba035e633b65d94"
+        }
+
++ Response 200 (application/json)
+
+        {
+            "id": 1,
+            "first_name": "Isadora",
+            "last_name": "Kwiatkowski",
+            "email": "isadorabk@gmail.com",
+            "created_at": "2018-08-13T08:40:51.620Z"
+        }
+
+### Delete User [DELETE]
+
+**Warning:** This action **permanently** removes the user from the database.
+
++ Response 204
+
+
+## Recipes Collection [/recipes]
+
+### Create a New Recipe [POST]
+
+You may create your own recipe using this action. It takes a JSON object containing recipe's title, description, instructions, number of serves, ingredients and user id.
+
++ Request (application/json)
+
+        {
+            "user_id": 1,
+            "title": "Fettuccine in Creamy Mushroom and Sage Sauce",
+            "serves": "2",
+            "instructions": "Bring a large pot of lightly salted water to a boil. Add pasta and cook for 8 to 10 minutes, or until al dente; drain. Heat olive oil a medium saucepan over medium heat, and cook onion and garlic chopped until transparent. Stir in mushrooms, and cook until tender. Mix in heavy cream and sage. Cook and stir until thickened. Toss sauce with cooked fettucine, and season with salt and pepper to serve.",
+            "ingredients": [{
+                "ingredient_id": 1,
+                "measure_id": 1,
+                "amount": 225
+            }, {
+                "ingredient_id": 2,
+                "measure_id": 1,
+                "amount": 100
+            }, {
+                "ingredient_id": 3,
+                "measure_id": 2,
+                "amount": 1
+            }, {
+                "ingredient_id": 4,
+                "measure_id": 3,
+                "amount": 0.5
+            }, {
+                "ingredient_id": 5,
+                "measure_id": 4,
+                "amount": 1
+            }, {
+                "ingredient_id": 6,
+                "measure_id": 2,
+                "amount": 1
+            }, {
+                "ingredient_id": 7,
+                "measure_id": 4,
+                "amount": 1
+            },  {
+                "ingredient_id": 8,
+                "measure_id": null,
+                "amount": null
+            },  {
+                "ingredient_id": 9,
+                "measure_id": null,
+                "amount": null
+            }] 
+        }
+
++ Response 201 (application/json)
+
+    + Headers
+
+            Location: /recipes/1
+
+    + Body
+
+            {
+                "id": 1,
+                "user_id": 1,
+                "title": "Fettuccine in Creamy Mushroom and Sage Sauce",
+                "serves": "2",
+                "instructions": "Bring a large pot of lightly salted water to a boil. Add pasta and cook for 8 to 10 minutes, or until al dente; drain. Heat olive oil a medium saucepan over medium heat, and cook onion and garlic chopped until transparent. Stir in mushrooms, and cook until tender. Mix in heavy cream and sage. Cook and stir until thickened. Toss sauce with cooked fettucine, and season with salt and pepper to serve.",
+                "photo": "https://static1.squarespace.com/static/5677430b69a91ad1510c421c/t/59ca5daff9a61eef0a3785a6/1506434487912/Mushroom+Spinach+Sage+Pasta%284%29.jpg",
+                "ingredients": [{
+                    "ingredient_id": 1,
+                    "measure_id": 1,
+                    "amount": 225
+                }, {
+                    "ingredient_id": 2,
+                    "measure_id": 1,
+                    "amount": 100
+                }, {
+                    "ingredient_id": 3,
+                    "measure_id": 2,
+                    "amount": 1
+                }, {
+                    "ingredient_id": 4,
+                    "measure_id": 3,
+                    "amount": 0.5
+                }, {
+                    "ingredient_id": 5,
+                    "measure_id": 4,
+                    "amount": 1
+                }, {
+                    "ingredient_id": 6,
+                    "measure_id": 2,
+                    "amount": 1
+                }, {
+                    "ingredient_id": 7,
+                    "measure_id": 4,
+                    "amount": 1
+                },  {
+                    "ingredient_id": 8,
+                    "measure_id": null,
+                    "amount": null
+                },  {
+                    "ingredient_id": 9,
+                    "measure_id": null,
+                    "amount": null
+                }] 
+            }
+    
+### Retrieve All Recipes [GET]
+
+Retrieve all recipes from a specific user
+
++ Response 200 (application/json)
+
+        [
+            {
+                "id": 1,
+                "title": "Fettuccine in Creamy Mushroom and Sage Sauce",
+                "serves": "2",
+                "instructions": "Bring a large pot of lightly salted water to a boil. Add pasta and cook for 8 to 10 minutes, or until al dente; drain. Heat olive oil a medium saucepan over medium heat, and cook onion and garlic chopped until transparent. Stir in mushrooms, and cook until tender. Mix in heavy cream and sage. Cook and stir until thickened. Toss sauce with cooked fettucine, and season with salt and pepper to serve.",
+                "photo": "https://static1.squarespace.com/static/5677430b69a91ad1510c421c/t/59ca5daff9a61eef0a3785a6/1506434487912/Mushroom+Spinach+Sage+Pasta%284%29.jpg",
+                "ingredients": [{
+                    "ingredient": {
+                        "name": "fettuccine pasta",
+                        "ingredient_type": "pasta"
+                    },
+                    "measure": "grams",
+                    "amount": 225
+                }, {
+                    "ingredient": {
+                        "name": "fresh oyster mushrooms",
+                        "ingredient_type": "mushroom"
+                    },
+                    "measure": "grams",
+                    "amount": 100
+                }, {
+                    "ingredient": {
+                        "name": "extra virgin olive oil",
+                        "ingredient_type": "condiment"
+                    },
+                    "measure": "tablespoons",
+                    "amount": 1
+                }, {
+                    "ingredient": {
+                        "name": "heavy cream",
+                        "ingredient_type": "dairy"
+                    },
+                    "measure": "cups",
+                    "amount": 0.5
+                }, {
+                    "ingredient": {
+                        "name": "onion",
+                        "ingredient_type": "vegetable"
+                    },
+                    "measure": "units",
+                    "amount": 1
+                }, {
+                    "ingredient": {
+                        "name": "fresh sage",
+                        "ingredient_type": "condiment"
+                    },
+                    "measure": "tablespoons",
+                    "amount": 1
+                }, {
+                    "ingredient": {
+                        "name": "clove garlic",
+                        "ingredient_type": "condiment"
+                    },
+                    "measure": "units",
+                    "amount": 1
+                },  {
+                    "ingredient": {
+                        "name": "salt",
+                        "ingredient_type": "condiment"
+                    },
+                    "measure": null,
+                    "amount": null
+                },  {
+                    "ingredient": {
+                        "name": "pepper",
+                        "ingredient_type": "condiment"
+                    },
+                    "measure": null,
+                    "amount": null
+                }] 
+            }, {
+                "id": 2,
+                "title": "Creamy Asparagus Risotto",
+                "serves": "2",
+                "instructions": "Chop the asparagus into small pieces. Finely dice an onion. Let the butter/oil melt in the pan and add the onion and cook until it’s translucent. Add the rice and toast for a minute or two. Then add 500ml of the stock and stir. Leave on a low simmer for 15 minutes (better stay nearby so you can give it an occasional stir). Add in the asparagus and peas, stir and leave for 5 more minutes. You probably need to add some more liquid (it will depend on the heat applied). Now, check the rice. It may need a few more minutes to finish cooking. Once the rice is soft it’s time to give it the finishing touch - if needed add a little water (add in small amounts, you don’t wanna overdo it!) and a little grated cheese to get the creaminess right. Remember: it needs to flow like lava.",
+                "photo": "https://hurrythefoodup.com/wp-content/uploads/2016/04/asparagus-risotto-16.jpg",
+                "ingredients": [{
+                    "ingredient": {
+                        "name": "arborio rice",
+                        "ingredient_type": "rice"
+                    },
+                    "measure": "cups",
+                    "amount": 0.5
+                }, {
+                    "ingredient": {
+                        "name": "asparagus",
+                        "ingredient_type": "vegetable"
+                    },
+                    "measure": "grams",
+                    "amount": 200
+                }, {
+                    "ingredient": {
+                        "name": "butter",
+                        "ingredient_type": "dairy"
+                    },
+                    "measure": "tablespoons",
+                    "amount": 1
+                }, {
+                    "ingredient": {
+                        "name": "peas",
+                        "ingredient_type": "legumes"
+                    },
+                    "measure": "cups",
+                    "amount": 1
+                }, {
+                    "ingredient": {
+                        "name": "onion",
+                        "ingredient_type": "vegetable"
+                    },
+                    "measure": "units",
+                    "amount": 1
+                }, {
+                    "ingredient": {
+                        "name": "vegetable broth",
+                        "ingredient_type": "broth"
+                    },
+                    "measure": "cups",
+                    "amount": 3
+                }, {
+                    "ingredient": {
+                        "name": "parmesan cheese",
+                        "ingredient_type": "diary"
+                    },
+                    "measure": "cups",
+                    "amount": 0.5
+                },  {
+                    "ingredient": {
+                        "name": "mint leaves",
+                        "ingredient_type": "condiment"
+                    },
+                    "measure": null,
+                    "amount": null
+                },  {
+                    "ingredient": {
+                        "name": "basil",
+                        "ingredient_type": "condiment"
+                    },
+                    "measure": null,
+                    "amount": null
+                }, {
+                    "ingredient": {
+                        "name": "parsely",
+                        "ingredient_type": "condiment"
+                    },
+                    "measure": null,
+                    "amount": null
+                }] 
+            }
+        ]
+
+
+## Recipe [/recipes/{recipe_id}]
+
++ Parameters
+    + recipe_id (number) - ID of the Recipe in the form of an integer
+
+
+### Retrieve a Recipe [GET]
+Retrieve a specific recipe from a specific user
+
++ Response 200 (application/json)
+
+        {
+            "id": 1,
+            "title": "Fettuccine in Creamy Mushroom and Sage Sauce",
+            "serves": "2",
+            "instructions": "Bring a large pot of lightly salted water to a boil. Add pasta and cook for 8 to 10 minutes, or until al dente; drain. Heat olive oil a medium saucepan over medium heat, and cook onion and garlic chopped until transparent. Stir in mushrooms, and cook until tender. Mix in heavy cream and sage. Cook and stir until thickened. Toss sauce with cooked fettucine, and season with salt and pepper to serve.",
+            "photo": "https://static1.squarespace.com/static/5677430b69a91ad1510c421c/t/59ca5daff9a61eef0a3785a6/1506434487912/Mushroom+Spinach+Sage+Pasta%284%29.jpg",
+            "ingredients": [{
+                "ingredient": {
+                    "name": "fettuccine pasta",
+                    "ingredient_type": "pasta"
+                },
+                "measure": "grams",
+                "amount": 225
+            }, {
+                "ingredient": {
+                    "name": "fresh oyster mushrooms",
+                    "ingredient_type": "mushroom"
+                },
+                "measure": "grams",
+                "amount": 100
+            }, {
+                "ingredient": {
+                    "name": "extra virgin olive oil",
+                    "ingredient_type": "condiment"
+                },
+                "measure": "tablespoons",
+                "amount": 1
+            }, {
+                "ingredient": {
+                    "name": "heavy cream",
+                    "ingredient_type": "dairy"
+                },
+                "measure": "cups",
+                "amount": 0.5
+            }, {
+                "ingredient": {
+                    "name": "onion",
+                    "ingredient_type": "vegetable"
+                },
+                "measure": "units",
+                "amount": 1
+            }, {
+                "ingredient": {
+                    "name": "fresh sage",
+                    "ingredient_type": "condiment"
+                },
+                "measure": "tablespoons",
+                "amount": 1
+            }, {
+                "ingredient": {
+                    "name": "clove garlic",
+                    "ingredient_type": "condiment"
+                },
+                "measure": "units",
+                "amount": 1
+            },  {
+                "ingredient": {
+                    "name": "salt",
+                    "ingredient_type": "condiment"
+                },
+                "measure": null,
+                "amount": null
+            },  {
+                "ingredient": {
+                    "name": "pepper",
+                    "ingredient_type": "condiment"
+                },
+                "measure": null,
+                "amount": null
+            }] 
+        }
+
+### Update a Recipe [PUT]
+
++ Request (application/json)
+
+        {
+            "user_id": 1,
+            "title": "Fettuccine in Creamy Mushroom and Sage Sauce",
+            "serves": "2",
+            "instructions": "Bring a large pot of lightly salted water to a boil. Add pasta and cook for 8 to 10 minutes, or until al dente; drain. Heat olive oil a medium saucepan over medium heat, and cook onion and garlic chopped until transparent. Stir in mushrooms, and cook until tender. Mix in heavy cream and sage. Cook and stir until thickened. Toss sauce with cooked fettucine, and season with salt and pepper to serve.",
+            "photo": "https://static1.squarespace.com/static/5677430b69a91ad1510c421c/t/59ca5daff9a61eef0a3785a6/1506434487912/Mushroom+Spinach+Sage+Pasta%284%29.jpg",
+            "ingredients": [{
+                "ingredient_id": 1,
+                "measure_id": 1,
+                "amount": 225
+            }, {
+                "ingredient_id": 2,
+                "measure_id": 1,
+                "amount": 100
+            }, {
+                "ingredient_id": 3,
+                "measure_id": 2,
+                "amount": 1
+            }, {
+                "ingredient_id": 4,
+                "measure_id": 3,
+                "amount": 1
+            }, {
+                "ingredient_id": 5,
+                "measure_id": 4,
+                "amount": 1
+            }, {
+                "ingredient_id": 6,
+                "measure_id": 2,
+                "amount": 1
+            }, {
+                "ingredient_id": 7,
+                "measure_id": 4,
+                "amount": 1
+            },  {
+                "ingredient_id": 8,
+                "measure_id": null,
+                "amount": null
+            },  {
+                "ingredient_id": 9,
+                "measure_id": null,
+                "amount": null
+            }] 
+        }
+
++ Response 200 (application/json)
+
+    + Headers
+
+            Location: /recipes/1
+
+    + Body
+
+            {
+                "id": 1,
+                "user_id": 1,
+                "title": "Fettuccine in Creamy Mushroom and Sage Sauce",
+                "serves": "2",
+                "instructions": "Bring a large pot of lightly salted water to a boil. Add pasta and cook for 8 to 10 minutes, or until al dente; drain. Heat olive oil a medium saucepan over medium heat, and cook onion and garlic chopped until transparent. Stir in mushrooms, and cook until tender. Mix in heavy cream and sage. Cook and stir until thickened. Toss sauce with cooked fettucine, and season with salt and pepper to serve.",
+                "photo": "https://static1.squarespace.com/static/5677430b69a91ad1510c421c/t/59ca5daff9a61eef0a3785a6/1506434487912/Mushroom+Spinach+Sage+Pasta%284%29.jpg",
+                "ingredients": [{
+                    "ingredient_id": 1,
+                    "measure_id": 1,
+                    "amount": 225
+                }, {
+                    "ingredient_id": 2,
+                    "measure_id": 1,
+                    "amount": 100
+                }, {
+                    "ingredient_id": 3,
+                    "measure_id": 2,
+                    "amount": 1
+                }, {
+                    "ingredient_id": 4,
+                    "measure_id": 3,
+                    "amount": 1
+                }, {
+                    "ingredient_id": 5,
+                    "measure_id": 4,
+                    "amount": 1
+                }, {
+                    "ingredient_id": 6,
+                    "measure_id": 2,
+                    "amount": 1
+                }, {
+                    "ingredient_id": 7,
+                    "measure_id": 4,
+                    "amount": 1
+                },  {
+                    "ingredient_id": 8,
+                    "measure_id": null,
+                    "amount": null
+                },  {
+                    "ingredient_id": 9,
+                    "measure_id": null,
+                    "amount": null
+                }] 
+            }
+
+### Delete a Recipe [DELETE]
+
+**Warning:** This action **permanently** removes the recipe from the database.
+
++ Response 204
+
+
+## Ingredients Collection [/ingredients]
+
+### Create a New Ingredient [POST]
+
+You may create an ingredient using this action. It takes a JSON object containing ingredient's name and type.
+
++ Request (application/json)
+
+        {                
+            "name": "fettuccine pasta",
+            "type": "pasta"
+        }
+        
++ Response 201 (application/json)
+
+    + Headers
+
+            Location: /ingredients/1
+
+    + Body
+
+            {                
+                "id": 1,
+                "name": "fettuccine pasta",
+                "ingredient_type": 1
+            }
+    
+### Retrieve All Ingredients [GET]
+
++ Response 200 (application/json)
+
+        [
+            {                
+                "id": 1,
+                "name": "fettuccine pasta",
+                "type": "pasta"
+            }, {                
+                "id": 2,
+                "name": "fresh oyster mushrooms",
+                "type": "mushroom"
+            }, {                
+                "id": 3,
+                "name": "extra virgin olive oil",
+                "type": "condiment"
+            }, {                
+                "id": 4,
+                "name": "heavy cream",
+                "type": "diary"
+            }, {                
+                "id": 5,
+                "name": "onion",
+                "type": "vegetable"
+            }, {                
+                "id": 6,
+                "name": "fresh sage",
+                "type": "condiment"
+            }, {                
+                "id": 7,
+                "name": "clove garlic",
+                "type": "condiment"
+            }, {                
+                "id": 8,
+                "name": "salt",
+                "type": "condiment"
+            }, {                
+                "id": 9,
+                "name": "pepper",
+                "type": "condiment"
+            }
+        ]
+
+
+## Measures Collection [/measures]
+    
+### Retrieve All Measures [GET]
+
++ Response 200 (application/json)
+
+        [
+            {                
+                "id": 1,
+                "name": "grams"
+            }, {                
+                "id": 2,
+                "name": "tablespoons"
+            }, {                
+                "id": 3,
+                "name": "cups"
+            }, {                
+                "id": 4,
+                "name": "units"
+            }
+        ]
+
+
+## Ingredient Type Collection [/ingredient_type]
+    
+### Retrieve All Ingredient's Type [GET]
+
++ Response 200 (application/json)
+
+        [
+            {                
+                "id": 1,
+                "name": "pasta"
+            }, {                
+                "id": 2,
+                "name": "mushroom"
+            }, {                
+                "id": 3,
+                "name": "dairy"
+            }, {                
+                "id": 4,
+                "name": "vegetable"
+            }, {                
+                "id": 5,
+                "name": "condiment"
+            }
+        ]
+
+
+## Plans Collection [/plans]
+
+### Create a New Plan [POST]
+
+You may create your own plan using this action. It takes a JSON object containing plan's name, meals and user id.
+
+
++ Request (application/json)
+
+        {
+            "user_id": 1,
+            "name": "Regular work week",
+            "meals": [{
+                "weekday": 1,
+                "meal_type": 3, 
+                "recipe_id": 1
+            }, {
+                "weekday": 2,
+                "meal_type": 3, 
+                "recipe_id": 2
+            }, {
+                "weekday": 3,
+                "meal_type": 3, 
+                "recipe_id": 1
+            }, {
+                "weekday": 4,
+                "meal_type": 3, 
+                "recipe_id": 2
+            }, {
+                "weekday": 5,
+                "meal_type": 3, 
+                "recipe_id": 1
+            }, {
+                "weekday": 6,
+                "meal_type": 3, 
+                "recipe_id": null
+            }, {
+                "weekday": 7,
+                "meal_type": 3, 
+                "recipe_id": 2
+            }]
+        }
+
++ Response 201 (application/json)
+
+    + Headers
+
+            Location: /plans/1
+
+    + Body
+
+            {
+                "id": 1,
+                "user_id": 1,
+                "name": "Regular work week",
+                "meals": [{
+                    "weekday": 1,
+                    "meal_type": 3, 
+                    "recipe_id": 1
+                }, {
+                    "weekday": 2,
+                    "meal_type": 3, 
+                    "recipe_id": 2
+                }, {
+                    "weekday": 3,
+                    "meal_type": 3, 
+                    "recipe_id": 1
+                }, {
+                    "weekday": 4,
+                    "meal_type": 3, 
+                    "recipe_id": 2
+                }, {
+                    "weekday": 5,
+                    "meal_type": 3, 
+                    "recipe_id": 1
+                }, {
+                    "weekday": 6,
+                    "meal_type": 3, 
+                    "recipe_id": null
+                }, {
+                    "weekday": 7,
+                    "meal_type": 3, 
+                    "recipe_id": 2
+                }]
+            }
+    
+### Retrieve All Plans [GET]
+
+Retrieve all plans from a specific user
+
++ Response 200 (application/json)
+
+        [
+            {
+                "id": 1,
+                "user_id": 1,
+                "name": "Italian week",
+                "meals": [{
+                    "weekday": "monday",
+                    "meal_type": "dinner", 
+                    "recipe": "Fettuccine in Creamy Mushroom and Sage Sauce"
+                }, {
+                    "weekday": "tuesday",
+                    "meal_type": "dinner", 
+                    "recipe": "Creamy Asparagus Risotto"
+                }, {
+                    "weekday": "wednesday",
+                    "meal_type": "dinner", 
+                    "recipe": "Fettuccine in Creamy Mushroom and Sage Sauce"
+                }, {
+                    "weekday": "thursady",
+                    "meal_type": "dinner", 
+                    "recipe": "Creamy Asparagus Risotto"
+                }, {
+                    "weekday": "friday",
+                    "meal_type": "dinner", 
+                    "recipe": "Fettuccine in Creamy Mushroom and Sage Sauce"
+                }, {
+                    "weekday": "saturday",
+                    "meal_type": "dinner", 
+                    "recipe": null
+                }, {
+                    "weekday": "sunday",
+                    "meal_type": "dinner", 
+                    "recipe": "Creamy Asparagus Risotto"
+                }]
+            }, {
+                "id": 2,
+                "user_id": 1,
+                "name": "Healthy week",
+                "meals": [{
+                    "weekday": "monday",
+                    "meal_type": "dinner", 
+                    "recipe": "Quinoa salad"
+                }, {
+                    "weekday": "tuesday",
+                    "meal_type": "dinner", 
+                    "recipe": "Summer salad"
+                }, {
+                    "weekday": "wednesday",
+                    "meal_type": "dinner", 
+                    "recipe": "Quinoa salad"
+                }, {
+                    "weekday": "thursady",
+                    "meal_type": "dinner", 
+                    "recipe": "Summer salad"
+                }, {
+                    "weekday": "friday",
+                    "meal_type": "dinner", 
+                    "recipe": "Quinoa salad"
+                }, {
+                    "weekday": "saturday",
+                    "meal_type": "dinner", 
+                    "recipe": null
+                }, {
+                    "weekday": "sunday",
+                    "meal_type": "dinner", 
+                    "recipe": null
+                }]
+            }
+        ]
+
+
+
+## Plan [/plans/{plan_id}]
+
++ Parameters
+    + plan_id (number) - ID of the Plan in the form of an integer
+
+
+### Retrieve a Plan [GET]
+Retrieve a specific plan from a specific user
+
++ Response 200 (application/json)
+
+        {
+            "id": 1,
+            "user_id": 1,
+            "name": "Regular work week",
+            "meals": [{
+                "weekday": "monday",
+                "meal_type": "dinner", 
+                "recipe": "Fettuccine in Creamy Mushroom and Sage Sauce"
+            }, {
+                "weekday": "tuesday",
+                "meal_type": "dinner", 
+                "recipe": "Creamy Asparagus Risotto"
+            }, {
+                "weekday": "wednesday",
+                "meal_type": "dinner", 
+                "recipe": "Fettuccine in Creamy Mushroom and Sage Sauce"
+            }, {
+                "weekday": "thursady",
+                "meal_type": "dinner", 
+                "recipe": "Creamy Asparagus Risotto"
+            }, {
+                "weekday": "friday",
+                "meal_type": "dinner", 
+                "recipe": "Fettuccine in Creamy Mushroom and Sage Sauce"
+            }, {
+                "weekday": "saturday",
+                "meal_type": "dinner", 
+                "recipe": null
+            }, {
+                "weekday": "sunday",
+                "meal_type": "dinner", 
+                "recipe": "Creamy Asparagus Risotto"
+            }]
+        }
+
+### Update a Plan [PUT]
+
++ Request (application/json)
+
+        {
+            "user_id": 1,
+            "name": "Regular work week",
+            "meals": [{
+                "weekday": 1,
+                "meal_type": 3, 
+                "recipe_id": 1
+            }, {
+                "weekday": 2,
+                "meal_type": 3, 
+                "recipe_id": 2
+            }, {
+                "weekday": 3,
+                "meal_type": 3, 
+                "recipe_id": 1
+            }, {
+                "weekday": 4,
+                "meal_type": 3, 
+                "recipe_id": 2
+            }, {
+                "weekday": 5,
+                "meal_type": 3, 
+                "recipe_id": 1
+            }, {
+                "weekday": 6,
+                "meal_type": 3, 
+                "recipe_id": null
+            }, {
+                "weekday": 7,
+                "meal_type": 3, 
+                "recipe_id": null
+            }]
+        }
+
++ Response 200 (application/json)
+
+    + Headers
+
+            Location: /recipes/1
+
+    + Body
+
+            {
+                "id": 1,
+                "user_id": 1,
+                "name": "Regular work week",
+                "meals": [{
+                    "weekday": 1,
+                    "meal_type": 3, 
+                    "recipe_id": 1
+                }, {
+                    "weekday": 2,
+                    "meal_type": 3, 
+                    "recipe_id": 2
+                }, {
+                    "weekday": 3,
+                    "meal_type": 3, 
+                    "recipe_id": 1
+                }, {
+                    "weekday": 4,
+                    "meal_type": 3, 
+                    "recipe_id": 2
+                }, {
+                    "weekday": 5,
+                    "meal_type": 3, 
+                    "recipe_id": 1
+                }, {
+                    "weekday": 6,
+                    "meal_type": 3, 
+                    "recipe_id": null
+                }, {
+                    "weekday": 7,
+                    "meal_type": 3, 
+                    "recipe_id": null
+                }]
+            }
+
+### Delete a Plan [DELETE]
+
+**Warning:** This action **permanently** removes the plan from the database.
+
++ Response 204
