@@ -17,7 +17,7 @@ class IngredientsController {
     if (ctx.method !== 'POST') throw new Error('Method not allowed');
 
     const data = ctx.request.body;
-    //Check if the request has email and password
+    //Check if the request has name
     if (data.name) {
       data.name = data.name.toLowerCase();
       // Check if there's already an ingredient with this name
