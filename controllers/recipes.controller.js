@@ -8,6 +8,7 @@ class RecipesController {
     if (!recipeModel) throw new Error('Recipe model not provided');
     this.Recipe = recipeModel;
     this.createUsersRecipe = this.createUsersRecipe.bind(this);
+    this.getUsersRecipes = this.getUsersRecipes.bind(this);
   }
 
   async createUsersRecipe (ctx, next) {
@@ -61,6 +62,59 @@ class RecipesController {
       };
       return;
     }
+  }
+
+  async getUsersRecipes (ctx, next) {
+    // Check if the method is correct
+    if (ctx.method !== 'GET') throw new Error('Method not allowed');
+
+    // Find all recipes
+    const recipes = await this.Recipe.findAll({
+      attributes: ['id', 'title', 'instructions', 'serves', 'photo']
+    });
+
+    if (recipes) {
+      let res = [];
+      
+      // Find list of ingredients for each recipe
+      await Promise.all(recipes.map(async (recipe) => {
+        const ingredients = await db.Recipe_ingredient.findAll({
+          where: {
+            recipe_id: recipe.id
+          },
+          attributes: ['id', 'ingredient_id', 'measure_id', 'amount'],
+          include: [{
+            model: db.Measure,
+            attributes: ['name']
+          }]
+        });
+
+        // Get the name of the measures for each ingredient
+        const ingredientsWithMeasure = ingredients.map(el => {
+          const measure = el.dataValues.measure_id ? el.dataValues.Measure.name : null;
+          const result = {
+            ...el.dataValues,
+            measure
+          };
+          delete result.Measure;
+          delete result.measure_id;
+          return result;
+        });
+
+        // Put the ingredients inside the recipes
+        const recipeWithIngredients = {
+          ...recipe.dataValues,
+          ingredients: ingredientsWithMeasure
+        };
+        res.push(recipeWithIngredients);
+      }));
+
+      ctx.body = res;
+    } else {
+      // Send an empty array if there's no recipe
+      ctx.body = [];
+    }
+    ctx.status = 200;
   }
 }
 

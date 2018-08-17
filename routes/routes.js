@@ -41,6 +41,7 @@ router.get('/ingredient-type', authMiddleware, ingredientsTypeController.getIngr
 
 // Recipe routes
 router
-  .post('/recipes', authMiddleware, recipesController.createUsersRecipe);
+  .post('/recipes', authMiddleware, recipesController.createUsersRecipe)
+  .get('/recipes', authMiddleware, recipesController.getUsersRecipes);
 
 module.exports = router;
