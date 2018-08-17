@@ -1,7 +1,5 @@
 'use strict';
 
-const db = require('../models').db;
-
 class MeasuresController {
   constructor (measureModel) {
     if (!measureModel) throw new Error('Measure model not provided');
