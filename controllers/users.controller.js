@@ -4,7 +4,6 @@ const bcrypt = require('bcrypt');
 const atob = require('atob');
 const jwt = require('jsonwebtoken');
 const filterProps = require('../services/utils.js').filterProps;
-const db = require('../models').db;
 
 class UsersController {
   constructor (userModel) {
@@ -29,13 +28,13 @@ class UsersController {
           email: userData.email,
         }
       });
+
       // if there's already a user, send an error
       if (user) {
         ctx.status = 401;
         ctx.body = {
           errors: ['User already exists.']
         };
-        
       } else {
         // If there's no user, create a new one
         user = filterProps(userData, ['email', 'first_name', 'last_name']);
