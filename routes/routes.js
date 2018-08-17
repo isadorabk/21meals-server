@@ -15,6 +15,10 @@ const ingredientsController = new IngredientsController(db.Ingredient);
 const MeasuresController = require('../controllers/measures.controller');
 const measuresController = new MeasuresController(db.Measure);
 
+const IngredientsTypeController = require('../controllers/ingredients.type.controller');
+const ingredientsTypeController = new IngredientsTypeController(db.Ingredient_type);
+
+
 // User routes
 router
   .post('/users', usersController.createUser)
@@ -28,5 +32,8 @@ router
 
 // Measure routes
 router.get('/measures', authMiddleware, measuresController.getMeasures);
+
+// Ingredient_type routes
+router.get('/ingredient-type', authMiddleware, ingredientsTypeController.getIngredientsType);
 
 module.exports = router;
