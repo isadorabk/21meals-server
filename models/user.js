@@ -22,10 +22,6 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.STRING,
       unique: true
     },
-    auth_token: {
-      type: DataTypes.STRING(1023),
-      unique: true
-    }, 
     hash_password: {
       allowNull: false,
       type: DataTypes.STRING,

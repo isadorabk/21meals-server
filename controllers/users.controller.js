@@ -1,6 +1,7 @@
 'use strict';
 
 const bcrypt = require('bcrypt');
+const atob = require('atob');
 const jwt = require('jsonwebtoken');
 const filterProps = require('../services/utils.js').filterProps;
 const db = require('../models').db;
@@ -40,15 +41,15 @@ class UsersController {
         user = filterProps(userData, ['email', 'first_name', 'last_name']);
         user.hash_password = await bcrypt.hash(userData.password, 10);
         let newUser = await this.User.create(user);
-
-        // // Create a new empty plan for the user
-        // const newPlan = await db.Plan.create({
-        //   name: 'My first plan',
-        //   user_id: newUser.dataValues.id
-        // });
-
-        ctx.body = filterProps(newUser.dataValues, ['id', 'email']);
-        // ctx.body.plan_id = newPlan.dataValues.id;
+        const { hash_password, updated_at, created_at, ...res } = newUser.dataValues;
+        // token expires in 30 days
+        const token = jwt.sign({
+          id: res.id
+        }, process.env.JWT_SECRET, {
+          expiresIn: 2592000
+        });
+        res.token = token;
+        ctx.body = res;
         ctx.status = 201;
       }
       // if there's no email or password, send an error
@@ -62,24 +63,32 @@ class UsersController {
 
   async signIn (ctx, next) {
     // Check if the method is correct
-    if (ctx.method !== 'POST') throw new Error('Method not allowed');
+    if (ctx.method !== 'GET') throw new Error('Method not allowed');
 
-    const body = ctx.request.body;
+    const basic = ctx.headers.authorization.split(' ');
+    if (basic.length < 2 && basic[0] !== 'Basic') throw new Error('Missing basic authentication header');
 
+    const [ email, password ] = atob(basic[1]).split(':');
+  
     const user = await this.User.findOne({
       where: {
-        email: body.email,
-      }
+        email
+      },
+      attributes: ['id', 'email', 'first_name', 'last_name', 'hash_password']
     });
+    
     if (user) {
-      const userData = filterProps(body, ['email', 'password']);
-      const match = await bcrypt.compare(userData.password, user.dataValues.hash_password);
+      const match = await bcrypt.compare(password, user.dataValues.hash_password);
       if (match) {
-        const auth_token = jwt.sign(userData, process.env.JWT_SECRET);
-        const userUpdated = await user.update({
-          auth_token: auth_token
+        const { hash_password, ...res } = user.dataValues;
+        // token expires in 30 days
+        const token = jwt.sign({
+          id: res.id
+        }, process.env.JWT_SECRET, {
+          expiresIn: 2592000
         });
-        ctx.body = filterProps(userUpdated.dataValues, ['id', 'email', 'auth_token']);
+        res.token = token;
+        ctx.body = res;
         ctx.status = 200;
       } else {
         ctx.status = 401;

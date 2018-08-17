@@ -16,5 +16,11 @@ module.exports = (sequelize, DataTypes) => {
     underscored: true
   });
 
+  Recipe_ingredient.associate = (models) => {
+    Recipe_ingredient.belongsTo(models.Measure, {
+      onDelete: 'CASCADE'
+    });
+  };
+
   return Recipe_ingredient;
 };
