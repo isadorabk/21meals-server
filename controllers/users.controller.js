@@ -1,9 +1,9 @@
 'use strict';
 
 const bcrypt = require('bcrypt');
+const atob = require('atob');
 const jwt = require('jsonwebtoken');
 const filterProps = require('../services/utils.js').filterProps;
-const db = require('../models').db;
 
 class UsersController {
   constructor (userModel) {
@@ -28,27 +28,27 @@ class UsersController {
           email: userData.email,
         }
       });
+
       // if there's already a user, send an error
       if (user) {
         ctx.status = 401;
         ctx.body = {
           errors: ['User already exists.']
         };
-        
       } else {
         // If there's no user, create a new one
         user = filterProps(userData, ['email', 'first_name', 'last_name']);
         user.hash_password = await bcrypt.hash(userData.password, 10);
         let newUser = await this.User.create(user);
-
-        // // Create a new empty plan for the user
-        // const newPlan = await db.Plan.create({
-        //   name: 'My first plan',
-        //   user_id: newUser.dataValues.id
-        // });
-
-        ctx.body = filterProps(newUser.dataValues, ['id', 'email']);
-        // ctx.body.plan_id = newPlan.dataValues.id;
+        const { hash_password, updated_at, created_at, ...res } = newUser.dataValues;
+        // token expires in 30 days
+        const token = jwt.sign({
+          id: res.id
+        }, process.env.JWT_SECRET, {
+          expiresIn: 2592000
+        });
+        res.token = token;
+        ctx.body = res;
         ctx.status = 201;
       }
       // if there's no email or password, send an error
@@ -62,24 +62,32 @@ class UsersController {
 
   async signIn (ctx, next) {
     // Check if the method is correct
-    if (ctx.method !== 'POST') throw new Error('Method not allowed');
+    if (ctx.method !== 'GET') throw new Error('Method not allowed');
 
-    const body = ctx.request.body;
+    const basic = ctx.headers.authorization.split(' ');
+    if (basic.length < 2 && basic[0] !== 'Basic') throw new Error('Missing basic authentication header');
 
+    const [ email, password ] = atob(basic[1]).split(':');
+  
     const user = await this.User.findOne({
       where: {
-        email: body.email,
-      }
+        email
+      },
+      attributes: ['id', 'email', 'first_name', 'last_name', 'hash_password']
     });
+    
     if (user) {
-      const userData = filterProps(body, ['email', 'password']);
-      const match = await bcrypt.compare(userData.password, user.dataValues.hash_password);
+      const match = await bcrypt.compare(password, user.dataValues.hash_password);
       if (match) {
-        const auth_token = jwt.sign(userData, process.env.JWT_SECRET);
-        const userUpdated = await user.update({
-          auth_token: auth_token
+        const { hash_password, ...res } = user.dataValues;
+        // token expires in 30 days
+        const token = jwt.sign({
+          id: res.id
+        }, process.env.JWT_SECRET, {
+          expiresIn: 2592000
         });
-        ctx.body = filterProps(userUpdated.dataValues, ['id', 'email', 'auth_token']);
+        res.token = token;
+        ctx.body = res;
         ctx.status = 200;
       } else {
         ctx.status = 401;
@@ -98,15 +106,8 @@ class UsersController {
   async getUser (ctx, next) {
     // Check if the method is correct
     if (ctx.method !== 'GET') throw new Error('Method not allowed');
-
-    // Find an user with this email
-    const user = await this.User.findOne({
-      where: {
-        id: ctx.user.id,
-      },
-    });
-    if (user) {
-      ctx.body = filterProps(user.dataValues, ['id', 'email', 'first_name', 'last_name']);
+    if (ctx.user) {
+      ctx.body = ctx.user;
       ctx.status = 200;
       await next();
     } else {

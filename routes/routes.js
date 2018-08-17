@@ -15,7 +15,7 @@ const ingredientsController = new IngredientsController(db.Ingredient);
 // User routes
 router
   .post('/users', usersController.createUser)
-  .post('/sign-in', usersController.signIn)
+  .get('/sign-in', usersController.signIn)
   .get('/me', authMiddleware, usersController.getUser);
 
 // Ingredient routes
