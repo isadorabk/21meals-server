@@ -15,20 +15,28 @@ class UsersController {
   }
 
   async createUser (ctx, next) {
+    // Check if the method is correct
     if (ctx.method !== 'POST') throw new Error('Method not allowed');
+
     const userData = ctx.request.body;
+    
+    //Check if the request has email and password
     if (userData.email && userData.password) {
+      // Check if there's already an user with this email
       let user = await this.User.findOne({
         where: {
           email: userData.email,
         }
       });
+
+      // if there's already a user, send an error
       if (user) {
         ctx.status = 401;
         ctx.body = {
           errors: ['User already exists.']
         };
       } else {
+        // If there's no user, create a new one
         user = filterProps(userData, ['email', 'first_name', 'last_name']);
         user.hash_password = await bcrypt.hash(userData.password, 10);
         let newUser = await this.User.create(user);
@@ -43,6 +51,7 @@ class UsersController {
         ctx.body = res;
         ctx.status = 201;
       }
+      // if there's no email or password, send an error
     } else {
       ctx.status = 406;
       ctx.body = {
@@ -52,6 +61,7 @@ class UsersController {
   }
 
   async signIn (ctx, next) {
+    // Check if the method is correct
     if (ctx.method !== 'GET') throw new Error('Method not allowed');
 
     const basic = ctx.headers.authorization.split(' ');
@@ -94,12 +104,14 @@ class UsersController {
   }
 
   async getUser (ctx, next) {
+    // Check if the method is correct
     if (ctx.method !== 'GET') throw new Error('Method not allowed');
     if (ctx.user) {
       ctx.body = ctx.user;
       ctx.status = 200;
       await next();
     } else {
+      // Send an error if there's no user with this email
       ctx.status = 404;
       ctx.body = {
         errors: ['User does not exist.']
