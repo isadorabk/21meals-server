@@ -52,7 +52,7 @@ class RecipesController {
           ...res,
           ingredients
         };
-        ctx.body = res;
+        ctx.body = [res];
         ctx.status = 201;
       }
     } else {

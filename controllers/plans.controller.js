@@ -53,7 +53,7 @@ class PlansController {
           ...res,
           meals
         };
-        ctx.body = res;
+        ctx.body = [res];
         ctx.status = 201;
       }
     } else {
@@ -131,7 +131,7 @@ class PlansController {
         meals
       };
 
-      ctx.body = planWithMeals;
+      ctx.body = [planWithMeals];
       ctx.status = 200;
     } else {
       // Send an error if there's no plan with this id

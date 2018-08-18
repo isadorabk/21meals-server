@@ -46,7 +46,7 @@ class IngredientsController {
         });
         res.ingredient_type = ingredient_type.name;
 
-        ctx.body = res;
+        ctx.body = [res];
         ctx.status = 201;
       }
     } else {
