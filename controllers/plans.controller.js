@@ -10,6 +10,7 @@ class PlansController {
     this.createUsersPlan = this.createUsersPlan.bind(this);
     this.getUsersPlans = this.getUsersPlans.bind(this);
     this.getUsersPlanById = this.getUsersPlanById.bind(this);
+    this.updateUsersPlanById = this.updateUsersPlanById.bind(this);
   }
 
   async createUsersPlan (ctx, next) {
@@ -53,7 +54,7 @@ class PlansController {
           ...res,
           meals
         };
-        ctx.body = [res];
+        ctx.body = res;
         ctx.status = 201;
       }
     } else {
@@ -131,7 +132,7 @@ class PlansController {
         meals
       };
 
-      ctx.body = [planWithMeals];
+      ctx.body = planWithMeals;
       ctx.status = 200;
     } else {
       // Send an error if there's no plan with this id
@@ -141,6 +142,62 @@ class PlansController {
       };
       return;
     }
+  }
+
+  async updateUsersPlanById (ctx, next) {
+    // Check if the method is correct
+    if (ctx.method !== 'PUT') throw new Error('Method not allowed');
+
+    const data = ctx.request.body;
+    data.name = data.name.toLowerCase();
+    
+    // Update the plan with the specific id
+    let plan = filterProps(data, ['name']);
+    const plan_id = ctx.params.plan_id;
+    plan.user_id = ctx.user.id;
+    await this.Plan.update(plan, {
+      where: {
+        id: plan_id
+      }
+    });
+    
+    // Update plan_recipe for each meal
+    const meals = data.meals;
+    await Promise.all(meals.map(async (meal) => {
+      await db.Plan_recipe.update({
+        recipe_id: meal.recipe_id
+      }, {
+        where: {
+          plan_id,
+          weekday: meal.weekday,
+          meal_type: meal.meal_type
+        }
+      });
+    }));
+
+    // Get updated plan with meals
+    const updatedPlan = await this.Plan.findOne({
+      where: {
+        id: plan_id
+      },
+      attributes: ['id', 'name']
+    });
+
+    const updatedMeals = await db.Plan_recipe.findAll({
+      where: {
+        plan_id: updatedPlan.id
+      },
+      attributes: ['id', 'weekday', 'meal_type', 'recipe_id']
+    });
+
+    // Put the updatedMeals inside the plan
+    const updatedPlanWithMeals = {
+      ...updatedPlan.dataValues,
+      meals: updatedMeals
+    };
+
+    ctx.body = updatedPlanWithMeals;
+    ctx.status = 200;
   }
 
 }

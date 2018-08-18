@@ -51,6 +51,7 @@ router
 router
   .post('/plans', authMiddleware, plansController.createUsersPlan)
   .get('/plans', authMiddleware, plansController.getUsersPlans)
-  .get('/plans/:plan_id', authMiddleware, plansController.getUsersPlanById);
+  .get('/plans/:plan_id', authMiddleware, plansController.getUsersPlanById)
+  .put('/plans/:plan_id', authMiddleware, plansController.updateUsersPlanById);
 
 module.exports = router;
