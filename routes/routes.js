@@ -52,6 +52,7 @@ router
   .post('/plans', authMiddleware, plansController.createUsersPlan)
   .get('/plans', authMiddleware, plansController.getUsersPlans)
   .get('/plans/:plan_id', authMiddleware, plansController.getUsersPlanById)
-  .put('/plans/:plan_id', authMiddleware, plansController.updateUsersPlanById);
+  .put('/plans/:plan_id', authMiddleware, plansController.updateUsersPlanById)
+  .delete('/plans/:plan_id', authMiddleware, plansController.deleteUsersPlanById);
 
 module.exports = router;

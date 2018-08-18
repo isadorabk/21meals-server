@@ -11,6 +11,7 @@ class PlansController {
     this.getUsersPlans = this.getUsersPlans.bind(this);
     this.getUsersPlanById = this.getUsersPlanById.bind(this);
     this.updateUsersPlanById = this.updateUsersPlanById.bind(this);
+    this.deleteUsersPlanById = this.deleteUsersPlanById.bind(this);
   }
 
   async createUsersPlan (ctx, next) {
@@ -198,6 +199,36 @@ class PlansController {
 
     ctx.body = updatedPlanWithMeals;
     ctx.status = 200;
+  }
+
+  async deleteUsersPlanById (ctx, next) {
+    // Check if the method is correct
+    if (ctx.method !== 'DELETE') throw new Error('Method not allowed');
+    
+    // Delete the plan with the specific id
+    const plan_id = ctx.params.plan_id;
+    
+    await this.Plan.destroy({
+      where: {
+        id: plan_id
+      }
+    });
+
+    const plan = await this.Plan.findOne({
+      where: {
+        id: plan_id
+      },
+      attributes: ['id', 'name']
+    });
+
+    if (!plan) ctx.status = 200;
+    else {
+      ctx.status = 501;
+      ctx.body = {
+        errors: ['An error ocurred. Plan not deleted']
+      };
+      return;
+    }
   }
 
 }
