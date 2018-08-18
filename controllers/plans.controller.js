@@ -9,6 +9,7 @@ class PlansController {
     this.Plan = planModel;
     this.createUsersPlan = this.createUsersPlan.bind(this);
     this.getUsersPlans = this.getUsersPlans.bind(this);
+    this.getUsersPlanById = this.getUsersPlanById.bind(this);
   }
 
   async createUsersPlan (ctx, next) {
@@ -99,6 +100,47 @@ class PlansController {
       ctx.body = [];
     }
     ctx.status = 200;
+  }
+
+  async getUsersPlanById (ctx, next) {
+
+    // Check if the method is correct
+    if (ctx.method !== 'GET') throw new Error('Method not allowed');
+
+    // Find the plan by the id parameter
+    const plan_id = ctx.params.plan_id;
+    const plan = await this.Plan.findOne({
+      where: {
+        id: plan_id
+      },
+      attributes: ['id', 'name']
+    });
+
+    if (plan) {
+      // Find all meals for this plan
+      const meals = await db.Plan_recipe.findAll({
+        where: {
+          plan_id: plan.id
+        },
+        attributes: ['id', 'weekday', 'meal_type', 'recipe_id']
+      });
+
+      // Put the meals inside the plan
+      const planWithMeals = {
+        ...plan.dataValues,
+        meals
+      };
+
+      ctx.body = planWithMeals;
+      ctx.status = 200;
+    } else {
+      // Send an error if there's no plan with this id
+      ctx.status = 404;
+      ctx.body = {
+        errors: ['Plan not found.']
+      };
+      return;
+    }
   }
 
 }
