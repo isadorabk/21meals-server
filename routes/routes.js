@@ -21,6 +21,9 @@ const ingredientsTypeController = new IngredientsTypeController(db.Ingredient_ty
 const RecipesController = require('../controllers/recipes.controller');
 const recipesController = new RecipesController(db.Recipe);
 
+const PlansController = require('../controllers/plans.controller');
+const plansController = new PlansController(db.Plan);
+
 
 // User routes
 router
@@ -43,5 +46,9 @@ router.get('/ingredient-type', authMiddleware, ingredientsTypeController.getIngr
 router
   .post('/recipes', authMiddleware, recipesController.createUsersRecipe)
   .get('/recipes', authMiddleware, recipesController.getUsersRecipes);
+
+// Plan routes
+router
+  .post('/plans', authMiddleware, plansController.createUsersPlan);
 
 module.exports = router;
