@@ -85,16 +85,18 @@ class RecipesController {
           attributes: ['id', 'ingredient_id', 'measure_id', 'amount'],
           include: [{
             model: db.Measure,
-            attributes: ['name']
+            attributes: ['name', 'short']
           }]
         });
 
         // Get the name of the measures for each ingredient
         const ingredientsWithMeasure = ingredients.map(el => {
           const measure = el.dataValues.measure_id ? el.dataValues.Measure.name : null;
+          const short_measure = el.dataValues.measure_id ? el.dataValues.Measure.short : null;
           const result = {
             ...el.dataValues,
-            measure
+            measure,
+            short_measure
           };
           delete result.Measure;
           delete result.measure_id;
