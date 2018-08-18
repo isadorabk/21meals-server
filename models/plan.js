@@ -21,12 +21,20 @@ module.exports = (sequelize, DataTypes) => {
   Plan.associate = (models) => {
     Plan.belongsTo(models.User, {
       onDelete: 'CASCADE',
-      allowNull: false
+      foreignKey: {
+        allowNull: false
+      }
     });
     Plan.belongsToMany(models.Recipe, {
-      through: 'Plan_recipe',
+      through: {
+        model: 'Plan_recipe',
+        unique: false
+      },
       onDelete: 'CASCADE',
-      allowNull: false
+      foreignKey: {
+        allowNull: false,
+        name: 'plan_id'
+      }
     });
   };
 

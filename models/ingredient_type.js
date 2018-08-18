@@ -21,6 +21,9 @@ module.exports = (sequelize, DataTypes) => {
   Ingredient_type.associate = (models) => {
     Ingredient_type.hasMany(models.Ingredient, {
       onDelete: 'CASCADE',
+      foreignKey: {
+        allowNull: false
+      }
     });
   };
 
