@@ -8,7 +8,7 @@ class PlansController {
     if (!planModel) throw new Error('Plan model not provided');
     this.Plan = planModel;
     this.createUsersPlan = this.createUsersPlan.bind(this);
-
+    this.getUsersPlans = this.getUsersPlans.bind(this);
   }
 
   async createUsersPlan (ctx, next) {
@@ -44,7 +44,7 @@ class PlansController {
             ...meal,
             plan_id: newPlan.id,
           };
-          const newPlanRecipe = await db.Plan_recipe.create(planRecipe);
+          await db.Plan_recipe.create(planRecipe);
         }));
 
         let res = filterProps(newPlan.dataValues, ['id', 'name', 'user_id']);
@@ -62,6 +62,43 @@ class PlansController {
       };
       return;
     }
+  }
+
+  async getUsersPlans (ctx, next) {
+    // Check if the method is correct
+    if (ctx.method !== 'GET') throw new Error('Method not allowed');
+
+    // Find all plans
+    const plans = await this.Plan.findAll({
+      attributes: ['id', 'name']
+    });
+
+    if (plans) {
+      let res = [];
+
+      // Find list of meals for each plan
+      await Promise.all(plans.map(async (plan) => {
+        const meals = await db.Plan_recipe.findAll({
+          where: {
+            plan_id: plan.id
+          },
+          attributes: ['id', 'weekday', 'meal_type', 'recipe_id']
+        });
+
+        // Put the meals inside the plans
+        const planWithMeals = {
+          ...plan.dataValues,
+          meals
+        };
+        res.push(planWithMeals);
+      }));
+
+      ctx.body = res;
+    } else {
+      // Send an empty array if there's no plan
+      ctx.body = [];
+    }
+    ctx.status = 200;
   }
 
 }

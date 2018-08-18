@@ -49,6 +49,7 @@ router
 
 // Plan routes
 router
-  .post('/plans', authMiddleware, plansController.createUsersPlan);
+  .post('/plans', authMiddleware, plansController.createUsersPlan)
+  .get('/plans', authMiddleware, plansController.getUsersPlans);
 
 module.exports = router;
