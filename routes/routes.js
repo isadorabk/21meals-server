@@ -24,7 +24,8 @@ router
   .post('/users', usersController.createUser)
   .get('/sign-in', usersController.signIn)
   .get('/me', authMiddleware, usersController.getUser)
-  .put('/me', authMiddleware, usersController.updateUser);
+  .put('/me', authMiddleware, usersController.updateUser)
+  .delete('/me', authMiddleware, usersController.deleteUser);
 
 // Ingredient routes
 router
