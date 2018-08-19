@@ -4,6 +4,7 @@ const bcrypt = require('bcrypt');
 const atob = require('atob');
 const jwt = require('jsonwebtoken');
 const filterProps = require('../services/utils.js').filterProps;
+const db = require('../models').db;
 
 class UsersController {
   constructor (userModel) {
@@ -12,6 +13,8 @@ class UsersController {
     this.createUser = this.createUser.bind(this);
     this.signIn = this.signIn.bind(this);
     this.getUser = this.getUser.bind(this);
+    this.updateUser = this.updateUser.bind(this);
+    this.deleteUser = this.deleteUser.bind(this);
   }
 
   async createUser (ctx, next) {
@@ -119,6 +122,63 @@ class UsersController {
       return;
     }
 
+  }
+
+  async updateUser (ctx, next) {
+    // Check if the method is correct
+    if (ctx.method !== 'PUT') throw new Error('Method not allowed');
+
+    // Update the user
+    const data = ctx.request.body;
+    const user_id = ctx.user.id;
+    const user = filterProps(data, ['first_name', 'last_name']);
+    await this.User.update(user, {
+      where: {
+        id: user_id
+      }
+    });
+
+    // Get updatedUser
+    const updatedUser = await db.User.findOne({
+      where: {
+        id: user_id
+      },
+      attributes: ['id', 'email', 'first_name', 'last_name']
+    });
+
+    ctx.body = updatedUser;
+    ctx.status = 200;
+  }
+
+  async deleteUser (ctx, next) {
+    // Check if the method is correct
+    if (ctx.method !== 'DELETE') throw new Error('Method not allowed');
+
+    // Delete the user with the specific id
+    const user_id = ctx.user.id;
+
+    await this.User.destroy({
+      where: {
+        id: user_id
+      }
+    });
+
+    // Check if the user was deleted correctly
+    const user = await this.User.findOne({
+      where: {
+        id: user_id
+      },
+      attributes: ['id']
+    });
+
+    if (!user) ctx.status = 200;
+    else {
+      ctx.status = 501;
+      ctx.body = {
+        errors: ['An error ocurred. User not deleted']
+      };
+      return;
+    }
   }
 }
 

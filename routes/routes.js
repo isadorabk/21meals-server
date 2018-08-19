@@ -29,7 +29,9 @@ const plansController = new PlansController(db.Plan);
 router
   .post('/users', usersController.createUser)
   .get('/sign-in', usersController.signIn)
-  .get('/me', authMiddleware, usersController.getUser);
+  .get('/me', authMiddleware, usersController.getUser)
+  .put('/me', authMiddleware, usersController.updateUser)
+  .delete('/me', authMiddleware, usersController.deleteUser);
 
 // Ingredient routes
 router
