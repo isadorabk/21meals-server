@@ -45,17 +45,46 @@ class RecipesController {
         await Promise.all(ingredients.map(async (ingredient) => {
           const recipeIngredient = {
             ...ingredient,
-            recipe_id: newRecipe.id
+            recipe_id: newRecipe.dataValues.id
           };
           await db.Recipe_ingredient.create(recipeIngredient);
+          return recipeIngredient;
         }));
 
-        let res = filterProps(newRecipe.dataValues, ['id', 'title', 'instructions', 'serves', 'photo', 'user_id']);
-        res = {
+        // Find all ingredients for this recipe
+        const newIngredients = await db.Recipe_ingredient.findAll({
+          where: {
+            recipe_id: newRecipe.dataValues.id
+          },
+          attributes: ['id', 'ingredient_id', 'measure_id', 'amount'],
+          include: [{
+            model: db.Measure,
+            attributes: ['name', 'short']
+          }]
+        });
+
+        // Get the name of the measures for each ingredient
+        const newIngredientsWithMeasure = newIngredients.map(el => {
+          const measure = el.dataValues.measure_id ? el.dataValues.Measure.dataValues.name : null;
+          const short_measure = el.dataValues.measure_id ? el.dataValues.Measure.dataValues.short : null;
+          const result = {
+            ...el.dataValues,
+            measure,
+            short_measure
+          };
+          delete result.Measure;
+          delete result.measure_id;
+          return result;
+        });
+
+        // Put the ingredients inside the recipe
+        let res = filterProps(newRecipe.dataValues, ['id', 'title', 'instructions', 'serves', 'photo']);
+        const newRecipeWithIngredients = {
           ...res,
-          ingredients
+          ingredients: newIngredientsWithMeasure
         };
-        ctx.body = [res];
+
+        ctx.body = [newRecipeWithIngredients];
         ctx.status = 201;
       }
     } else {
