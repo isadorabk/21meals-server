@@ -66,7 +66,7 @@ class IngredientsController {
       ctx.body = ingredients.map(el => {
         const res = {
           ...el.dataValues,
-          ingredient_type: el.dataValues.Ingredient_type.name
+          ingredient_type: el.dataValues.Ingredient_type.dataValues.name
         };
         delete res.Ingredient_type;
         return res;

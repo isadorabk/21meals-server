@@ -9,6 +9,7 @@ class RecipesController {
     this.Recipe = recipeModel;
     this.createUsersRecipe = this.createUsersRecipe.bind(this);
     this.getUsersRecipes = this.getUsersRecipes.bind(this);
+    this.getUsersRecipeById = this.getUsersRecipeById.bind(this);
   }
 
   async createUsersRecipe (ctx, next) {
@@ -52,7 +53,7 @@ class RecipesController {
           ...res,
           ingredients
         };
-        ctx.body = res;
+        ctx.body = [res];
         ctx.status = 201;
       }
     } else {
@@ -85,16 +86,18 @@ class RecipesController {
           attributes: ['id', 'ingredient_id', 'measure_id', 'amount'],
           include: [{
             model: db.Measure,
-            attributes: ['name']
+            attributes: ['name', 'short']
           }]
         });
 
         // Get the name of the measures for each ingredient
         const ingredientsWithMeasure = ingredients.map(el => {
-          const measure = el.dataValues.measure_id ? el.dataValues.Measure.name : null;
+          const measure = el.dataValues.measure_id ? el.dataValues.Measure.dataValues.name : null;
+          const short_measure = el.dataValues.measure_id ? el.dataValues.Measure.dataValues.short : null;
           const result = {
             ...el.dataValues,
-            measure
+            measure,
+            short_measure
           };
           delete result.Measure;
           delete result.measure_id;
@@ -115,6 +118,70 @@ class RecipesController {
       ctx.body = [];
     }
     ctx.status = 200;
+  }
+
+  async getUsersRecipeById (ctx, next) {
+    // Check if the method is correct
+    if (ctx.method !== 'GET') throw new Error('Method not allowed');
+
+    // Find the recipe by the id parameter
+    const recipe_id = ctx.params.recipe_id;
+    const recipe = await this.Recipe.findOne({
+      where: {
+        id: recipe_id
+      },
+      attributes: ['id', 'title', 'instructions', 'serves', 'photo']
+    });
+
+    if (recipe) {
+      // Find all ingredients for this recipe
+      const ingredients = await db.Recipe_ingredient.findAll({
+        where: {
+          recipe_id
+        },
+        attributes: ['id', 'ingredient_id', 'measure_id', 'amount'],
+        include: [{
+          model: db.Measure,
+          attributes: ['name', 'short']
+        }]
+      });
+
+      // Get the name of the measures for each ingredient
+      const ingredientsWithMeasure = ingredients.map(el => {
+        const measure = el.dataValues.measure_id ? el.dataValues.Measure.dataValues.name : null;
+        const short_measure = el.dataValues.measure_id ? el.dataValues.Measure.dataValues.short : null;
+        
+        const result = {
+          ...el.dataValues,
+          measure,
+          short_measure
+        };
+        delete result.Measure;
+        delete result.measure_id;
+        return result;
+        
+        
+      });
+
+      // Put the ingredients inside the recipes
+      const recipeWithIngredients = {
+        ...recipe.dataValues,
+        ingredients: ingredientsWithMeasure
+      };
+
+      ctx.body = [recipeWithIngredients];
+      ctx.status = 200;
+
+    } else {
+      // Send an error if there's no recipe with this id
+      ctx.status = 404;
+      ctx.body = {
+        errors: ['Recipe not found.']
+      };
+      return;
+    }
+
+
   }
 }
 
