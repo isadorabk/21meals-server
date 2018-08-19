@@ -13,7 +13,7 @@ module.exports = (sequelize, DataTypes) => {
       allowNull: false,
       type: DataTypes.STRING
     },
-    meal: {
+    meal_type: {
       allowNull: false,
       type: DataTypes.STRING
     }

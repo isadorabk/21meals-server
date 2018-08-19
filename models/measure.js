@@ -13,6 +13,9 @@ module.exports = (sequelize, DataTypes) => {
       allowNull: false,
       type: DataTypes.STRING,
       unique: true
+    },
+    short: {
+      type: DataTypes.STRING
     }
   }, {
     underscored: true
