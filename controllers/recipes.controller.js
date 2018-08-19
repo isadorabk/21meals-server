@@ -10,6 +10,7 @@ class RecipesController {
     this.createUsersRecipe = this.createUsersRecipe.bind(this);
     this.getUsersRecipes = this.getUsersRecipes.bind(this);
     this.getUsersRecipeById = this.getUsersRecipeById.bind(this);
+    this.updateUsersRecipeById = this.updateUsersRecipeById.bind(this);
   }
 
   async createUsersRecipe (ctx, next) {
@@ -150,7 +151,6 @@ class RecipesController {
       const ingredientsWithMeasure = ingredients.map(el => {
         const measure = el.dataValues.measure_id ? el.dataValues.Measure.dataValues.name : null;
         const short_measure = el.dataValues.measure_id ? el.dataValues.Measure.dataValues.short : null;
-        
         const result = {
           ...el.dataValues,
           measure,
@@ -159,8 +159,6 @@ class RecipesController {
         delete result.Measure;
         delete result.measure_id;
         return result;
-        
-        
       });
 
       // Put the ingredients inside the recipes
@@ -181,6 +179,85 @@ class RecipesController {
       return;
     }
 
+
+  }
+
+  async updateUsersRecipeById (ctx, next) {
+    // Check if the method is correct
+    if (ctx.method !== 'PUT') throw new Error('Method not allowed');
+
+    const data = ctx.request.body;
+    data.title = data.title.toLowerCase();
+
+    // Update the recipe with the specific id
+    let recipe = filterProps(data, ['title', 'instructions', 'serves', 'photo']);
+    const recipe_id = ctx.params.recipe_id;
+    recipe.user_id = ctx.user.id;
+    await this.Recipe.update(recipe, {
+      where: {
+        id: recipe_id
+      }
+    });
+
+    // Update recipe_ingredient for each ingredient
+    const ingredients = data.ingredients;
+    await Promise.all(ingredients.map(async (ingredient) => {
+      const recipeIngredient = {
+        ...ingredient,
+        recipe_id
+      };
+      await db.Recipe_ingredient.update({
+        amount: ingredient.amount,
+        measure_id: ingredient.measure_id
+      }, {
+        where: {
+          recipe_id,
+          ingredient_id: ingredient.ingredient_id
+        }
+      });
+    }));
+
+    // Get updated recipe with ingredients
+    const updatedRecipe = await this.Recipe.findOne({
+      where: {
+        id: recipe_id
+      },
+      attributes: ['id', 'title', 'instructions', 'serves', 'photo']
+    });
+
+    const updatedIngredients = await db.Recipe_ingredient.findAll({
+      where: {
+        recipe_id
+      },
+      attributes: ['id', 'ingredient_id', 'measure_id', 'amount'],
+      include: [{
+        model: db.Measure,
+        attributes: ['name', 'short']
+      }]
+    });
+
+    // Get the name of the measures for each ingredient
+    const updatedIngredientsWithMeasure = updatedIngredients.map(el => {
+      const measure = el.dataValues.measure_id ? el.dataValues.Measure.dataValues.name : null;
+      const short_measure = el.dataValues.measure_id ? el.dataValues.Measure.dataValues.short : null;
+      const result = {
+        ...el.dataValues,
+        measure,
+        short_measure
+      };
+      delete result.Measure;
+      delete result.measure_id;
+      return result;
+    });
+
+    // Put the ingredients inside the recipes
+    const updatedRecipeWithIngredients = {
+      ...updatedRecipe.dataValues,
+      ingredients: updatedIngredientsWithMeasure
+    };
+
+    ctx.body = [updatedRecipeWithIngredients];
+    ctx.status = 200;
 
   }
 }

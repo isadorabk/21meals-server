@@ -43,6 +43,7 @@ router.get('/ingredient-type', authMiddleware, ingredientsTypeController.getIngr
 router
   .post('/recipes', authMiddleware, recipesController.createUsersRecipe)
   .get('/recipes', authMiddleware, recipesController.getUsersRecipes)
-  .get('/recipes/:recipe_id', authMiddleware, recipesController.getUsersRecipeById);
+  .get('/recipes/:recipe_id', authMiddleware, recipesController.getUsersRecipeById)
+  .put('/recipes/:recipe_id', authMiddleware, recipesController.updateUsersRecipeById);
 
 module.exports = router;
