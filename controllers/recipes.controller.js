@@ -11,6 +11,7 @@ class RecipesController {
     this.getUsersRecipes = this.getUsersRecipes.bind(this);
     this.getUsersRecipeById = this.getUsersRecipeById.bind(this);
     this.updateUsersRecipeById = this.updateUsersRecipeById.bind(this);
+    this.deleteUsersRecipeById = this.deleteUsersRecipeById.bind(this);
   }
 
   async createUsersRecipe (ctx, next) {
@@ -259,6 +260,37 @@ class RecipesController {
     ctx.body = [updatedRecipeWithIngredients];
     ctx.status = 200;
 
+  }
+
+  async deleteUsersRecipeById (ctx, next) {
+    // Check if the method is correct
+    if (ctx.method !== 'DELETE') throw new Error('Method not allowed');
+
+    // Delete the recipe with the specific id
+    const recipe_id = ctx.params.recipe_id;
+
+    await this.Recipe.destroy({
+      where: {
+        id: recipe_id
+      }
+    });
+
+    // Check if the recipe was deleted correctly
+    const recipe = await this.Recipe.findOne({
+      where: {
+        id: recipe_id
+      },
+      attributes: ['id']
+    });
+
+    if (!recipe) ctx.status = 200;
+    else {
+      ctx.status = 501;
+      ctx.body = {
+        errors: ['An error ocurred. Recipe not deleted']
+      };
+      return;
+    }
   }
 }
 
