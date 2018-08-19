@@ -50,10 +50,17 @@ class PlansController {
           await db.Plan_recipe.create(planRecipe);
         }));
 
+        const newMeals = await db.Plan_recipe.findAll({
+          where: {
+            plan_id: newPlan.id
+          },
+          attributes: ['id', 'weekday', 'meal_type', 'recipe_id']
+        });
+
         let res = filterProps(newPlan.dataValues, ['id', 'name', 'user_id']);
         res = {
           ...res,
-          meals
+          meals: newMeals
         };
         ctx.body = res;
         ctx.status = 201;
