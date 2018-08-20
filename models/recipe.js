@@ -14,7 +14,7 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.STRING(511),
       unique: true
     },
-    intructions: {
+    instructions: {
       type: DataTypes.STRING(1023)
     },
     serves: {
