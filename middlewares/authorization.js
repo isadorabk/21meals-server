@@ -27,7 +27,7 @@ const authorize = async (ctx, next) => {
       console.error(error);
     }
   } else {
-    ctx.status = 400;
+    ctx.status = 401;
     ctx.body = {
       errors: ['Wrong authorization strategy.']
     };

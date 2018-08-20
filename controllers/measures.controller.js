@@ -15,14 +15,8 @@ class MeasuresController {
     const measures = await this.Measure.findAll({
       attributes: ['id', 'name', 'short'],
     });
-
     if (measures) {
-      ctx.body = measures.map(el => {
-        const res = {
-          ...el.dataValues
-        };
-        return res;
-      });
+      ctx.body = measures.map(el => el.dataValues);
     } else {
       // Send an empty array if there's no measure
       ctx.body = [];
