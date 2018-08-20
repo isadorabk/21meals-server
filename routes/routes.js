@@ -15,12 +15,8 @@ const ingredientsController = new IngredientsController(db.Ingredient);
 const MeasuresController = require('../controllers/measures.controller');
 const measuresController = new MeasuresController(db.Measure);
 
-const IngredientsTypeController = require('../controllers/ingredients.type.controller');
-const ingredientsTypeController = new IngredientsTypeController(db.Ingredient_type);
-
 const RecipesController = require('../controllers/recipes.controller');
 const recipesController = new RecipesController(db.Recipe);
-
 
 // User routes
 router
