@@ -44,6 +44,12 @@ module.exports = (sequelize, DataTypes) => {
         allowNull: false
       }
     });
+    User.hasMany(models.Shopping_list_item, {
+      onDelete: 'CASCADE',
+      foreignKey: {
+        allowNull: false
+      }
+    });
   };
 
   return User;
