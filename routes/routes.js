@@ -27,6 +27,9 @@ const plansController = new PlansController(db.Plan);
 const MealsController = require('../controllers/meals.controller');
 const mealsController = new MealsController(db.Plan_recipe);
 
+const ShoppingListItemsController = require('../controllers/shopping.list.items.controller');
+const shoppingListItemsController = new ShoppingListItemsController(db.Shopping_list_item);
+
 
 // User routes
 router
@@ -66,5 +69,9 @@ router
 // Meal routes
 router
   .put('/plans/:plan_id/meal', authMiddleware, mealsController.updatePlansMealById);
+
+// Shopping list routes
+router
+  .get('/shopping-list-items', authMiddleware, shoppingListItemsController.getUsersShoppingListItems);
 
 module.exports = router;
