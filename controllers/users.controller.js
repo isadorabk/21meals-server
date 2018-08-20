@@ -44,13 +44,64 @@ class UsersController {
         user.hash_password = await bcrypt.hash(userData.password, 10);
         let newUser = await this.User.create(user);
         const { hash_password, updated_at, created_at, ...res } = newUser.dataValues;
-        // token expires in 30 days
+
+        // Create first empty plan for the user
+        const firstPlan = {
+          name: 'My first plan',
+          meals: [{
+            weekday: 'monday',
+            meal_type: 'dinner',
+            recipe_id: null
+          }, {
+            weekday: 'tuesday',
+            meal_type: 'dinner',
+            recipe_id: null
+          }, {
+            weekday: 'wednesday',
+            meal_type: 'dinner',
+            recipe_id: null
+          }, {
+            weekday: 'thursday',
+            meal_type: 'dinner',
+            recipe_id: null
+          }, {
+            weekday: 'friday',
+            meal_type: 'dinner',
+            recipe_id: null
+          }, {
+            weekday: 'saturday',
+            meal_type: 'dinner',
+            recipe_id: null
+          }, {
+            weekday: 'sunday',
+            meal_type: 'dinner',
+            recipe_id: null
+          }]
+        };
+        let plan = filterProps(firstPlan, ['name']);
+        plan.user_id = res.id;
+        const newPlan = await db.Plan.create(plan);
+
+        // Create plan_recipe for each meal
+        const meals = firstPlan.meals;
+        await Promise.all(meals.map(async (meal) => {
+          const planRecipe = {
+            ...meal,
+            plan_id: newPlan.id,
+          };
+          await db.Plan_recipe.create(planRecipe);
+        }));
+
+
+        // token expires in 30 days and now it has the id for the first plan
         const token = jwt.sign({
-          id: res.id
+          id: res.id,
+          plan_id: newPlan.id
         }, process.env.JWT_SECRET, {
           expiresIn: 2592000
         });
         res.token = token;
+        
         ctx.body = res;
         ctx.status = 201;
       }
@@ -83,13 +134,23 @@ class UsersController {
       const match = await bcrypt.compare(password, user.dataValues.hash_password);
       if (match) {
         const { hash_password, ...res } = user.dataValues;
-        // token expires in 30 days
+
+        // get first plan id
+        const plan = await db.Plan.findOne({
+          where: {
+            user_id: res.id
+          },
+          attributes: ['id']
+        });
+        // token expires in 30 days and now it has the id for the first plan
         const token = jwt.sign({
-          id: res.id
+          id: res.id,
+          plan_id: plan.id
         }, process.env.JWT_SECRET, {
           expiresIn: 2592000
         });
         res.token = token;
+
         ctx.body = res;
         ctx.status = 200;
       } else {

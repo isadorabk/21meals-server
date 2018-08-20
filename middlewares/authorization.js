@@ -20,6 +20,9 @@ const authorize = async (ctx, next) => {
         };
         return;
       }
+      // add first plan_id
+      
+      ctx.plan_id = tokenDecoded.plan_id;
       ctx.user = user.dataValues;
       await next();
     } catch (error) {
