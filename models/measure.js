@@ -25,6 +25,9 @@ module.exports = (sequelize, DataTypes) => {
     Measure.hasMany(models.Recipe_ingredient, {
       onDelete: 'CASCADE'
     });
+    Measure.hasMany(models.Shopping_list_item, {
+      onDelete: 'CASCADE'
+    });
   };
 
   return Measure;

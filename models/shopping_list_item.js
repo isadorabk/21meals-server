@@ -36,6 +36,9 @@ module.exports = (sequelize, DataTypes) => {
         allowNull: false
       }
     });
+    Shopping_list_item.belongsTo(models.Measure, {
+      onDelete: 'CASCADE'
+    });
   };
 
   return Shopping_list_item;

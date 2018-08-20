@@ -54,7 +54,7 @@ class UsersController {
 
         // Create first empty plan for the user
         const firstPlan = {
-          name: 'My first plan',
+          name: 'my first plan',
           meals: [{
             weekday: 'monday',
             meal_type: 'dinner',
