@@ -94,12 +94,12 @@ class UsersController {
         await Promise.all(meals.map(async (meal) => {
           const planRecipe = {
             ...meal,
-            plan_id: newPlan.id,
+            plan_id: newPlan.dataValues.id,
           };
           await db.Plan_recipe.create(planRecipe);
         }));
 
-        res.plan_id = newPlan.id;
+        res.plan_id = newPlan.dataValues.id;
 
         ctx.body = res;
         ctx.status = 201;
@@ -140,6 +140,16 @@ class UsersController {
           expiresIn: 2592000
         });
         res.token = token;
+
+        // get first plan id
+        const firstPlan = await db.Plan.findOne({
+          where: {
+            user_id: res.id
+          },
+          attributes: ['id']
+        });
+        res.plan_id = firstPlan.dataValues.id;
+
         ctx.body = res;
         ctx.status = 200;
       } else {
