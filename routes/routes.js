@@ -46,7 +46,10 @@ router.get('/ingredient-type', authMiddleware, ingredientsTypeController.getIngr
 // Recipe routes
 router
   .post('/recipes', authMiddleware, recipesController.createUsersRecipe)
-  .get('/recipes', authMiddleware, recipesController.getUsersRecipes);
+  .get('/recipes', authMiddleware, recipesController.getUsersRecipes)
+  .get('/recipes/:recipe_id', authMiddleware, recipesController.getUsersRecipeById)
+  .put('/recipes/:recipe_id', authMiddleware, recipesController.updateUsersRecipeById)
+  .delete('/recipes/:recipe_id', authMiddleware, recipesController.deleteUsersRecipeById);
 
 // Plan routes
 router
