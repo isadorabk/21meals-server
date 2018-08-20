@@ -72,6 +72,7 @@ router
 
 // Shopping list routes
 router
-  .get('/shopping-list-items', authMiddleware, shoppingListItemsController.getUsersShoppingListItems);
+  .get('/shopping-list-items', authMiddleware, shoppingListItemsController.getUsersShoppingListItems)
+  .put('/shopping-list-items', authMiddleware, shoppingListItemsController.updateUsersShoppingListItems);
 
 module.exports = router;
