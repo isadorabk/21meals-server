@@ -59,12 +59,12 @@ router
 router
   .post('/plans', authMiddleware, plansController.createUsersPlan)
   .get('/plans', authMiddleware, plansController.getUsersPlans)
-  .get('/plans/plan_id', authMiddleware, plansController.getUsersPlanById)
-  .put('/plans/plan_id', authMiddleware, plansController.updateUsersPlanById)
-  .delete('/plans/plan_id', authMiddleware, plansController.deleteUsersPlanById);
+  .get('/plans/:plan_id', authMiddleware, plansController.getUsersPlanById)
+  .put('/plans/:plan_id', authMiddleware, plansController.updateUsersPlanById)
+  .delete('/plans/:plan_id', authMiddleware, plansController.deleteUsersPlanById);
 
 // Meal routes
 router
-  .put('/plans/plan_id/meal', authMiddleware, mealsController.updatePlansMealById);
+  .put('/plans/:plan_id/meal', authMiddleware, mealsController.updatePlansMealById);
 
 module.exports = router;

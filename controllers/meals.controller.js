@@ -23,9 +23,7 @@ class MealsController {
         id: data.meal_id
       }
     });
-    
-    // Find the plan_id by the token
-    const plan_id = ctx.plan_id;
+    const plan_id = ctx.params.plan_id;
 
     // Get updated plan with meals
     const updatedPlan = await db.Plan.findOne({

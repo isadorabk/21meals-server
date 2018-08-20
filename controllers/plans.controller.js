@@ -116,9 +116,8 @@ class PlansController {
     // Check if the method is correct
     if (ctx.method !== 'GET') throw new Error('Method not allowed');
 
-    // Find the plan by the token plan id
-    const plan_id = ctx.plan_id;
-
+    // Find the plan by the id parameter
+    const plan_id = ctx.params.plan_id;
     const plan = await this.Plan.findOne({
       where: {
         id: plan_id
@@ -162,8 +161,7 @@ class PlansController {
     
     // Update the plan with the specific id
     let plan = filterProps(data, ['name']);
-    // Find the plan_id by the token
-    const plan_id = ctx.plan_id;
+    const plan_id = ctx.params.plan_id;
     plan.user_id = ctx.user.id;
     await this.Plan.update(plan, {
       where: {
@@ -215,8 +213,7 @@ class PlansController {
     if (ctx.method !== 'DELETE') throw new Error('Method not allowed');
     
     // Delete the plan with the specific id
-    // Find the plan_id by the token
-    const plan_id = ctx.plan_id;
+    const plan_id = ctx.params.plan_id;
     
     await this.Plan.destroy({
       where: {
