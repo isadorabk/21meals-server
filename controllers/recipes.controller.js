@@ -100,8 +100,12 @@ class RecipesController {
     // Check if the method is correct
     if (ctx.method !== 'GET') throw new Error('Method not allowed');
 
-    // Find all recipes
+    // Find all recipes from the user
+    const user_id = ctx.user.id;
     const recipes = await this.Recipe.findAll({
+      where: {
+        user_id
+      },
       attributes: ['id', 'title', 'instructions', 'serves', 'photo']
     });
 

@@ -78,8 +78,12 @@ class PlansController {
     // Check if the method is correct
     if (ctx.method !== 'GET') throw new Error('Method not allowed');
 
-    // Find all plans
+    // Find all plans from the user
+    const user_id = ctx.user.id;
     const plans = await this.Plan.findAll({
+      where: {
+        user_id
+      },
       attributes: ['id', 'name']
     });
 
