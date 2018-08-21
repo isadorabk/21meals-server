@@ -35,7 +35,7 @@ class UsersController {
 
       // if there's already a user, send an error
       if (user) {
-        ctx.status = 401;
+        ctx.status = 403;
         ctx.body = {
           errors: ['User already exists.']
         };
