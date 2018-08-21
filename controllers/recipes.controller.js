@@ -48,7 +48,6 @@ class RecipesController {
             recipe_id: newRecipe.dataValues.id
           };
           await db.Recipe_ingredient.create(recipeIngredient);
-          return recipeIngredient;
         }));
 
         // Find all ingredients for this recipe
@@ -90,7 +89,7 @@ class RecipesController {
     } else {
       ctx.status = 406;
       ctx.body = {
-        errors: ['Name of the recipe needed']
+        errors: ['Title of the recipe needed']
       };
       return;
     }
