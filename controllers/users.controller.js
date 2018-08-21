@@ -5,6 +5,7 @@ const atob = require('atob');
 const jwt = require('jsonwebtoken');
 const filterProps = require('../services/utils.js').filterProps;
 const db = require('../models').db;
+const firstPlan = require('../services/firstPlan').firstPlan;
 
 class UsersController {
   constructor (userModel) {
@@ -53,38 +54,6 @@ class UsersController {
         res.token = token;
 
         // Create first empty plan for the user
-        const firstPlan = {
-          name: 'my first plan',
-          meals: [{
-            weekday: 'monday',
-            meal_type: 'dinner',
-            recipe_id: null
-          }, {
-            weekday: 'tuesday',
-            meal_type: 'dinner',
-            recipe_id: null
-          }, {
-            weekday: 'wednesday',
-            meal_type: 'dinner',
-            recipe_id: null
-          }, {
-            weekday: 'thursday',
-            meal_type: 'dinner',
-            recipe_id: null
-          }, {
-            weekday: 'friday',
-            meal_type: 'dinner',
-            recipe_id: null
-          }, {
-            weekday: 'saturday',
-            meal_type: 'dinner',
-            recipe_id: null
-          }, {
-            weekday: 'sunday',
-            meal_type: 'dinner',
-            recipe_id: null
-          }]
-        };
         let plan = filterProps(firstPlan, ['name']);
         plan.user_id = res.id;
         const newPlan = await db.Plan.create(plan);

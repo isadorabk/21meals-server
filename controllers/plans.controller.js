@@ -54,7 +54,7 @@ class PlansController {
           where: {
             plan_id: newPlan.id
           },
-          attributes: ['id', 'weekday', 'meal_type', 'recipe_id']
+          attributes: ['id', 'weekday', 'meal_type', 'recipe_id', 'meal_order']
         });
 
         let res = filterProps(newPlan.dataValues, ['id', 'name', 'user_id']);
@@ -96,7 +96,7 @@ class PlansController {
           where: {
             plan_id: plan.id
           },
-          attributes: ['id', 'weekday', 'meal_type', 'recipe_id']
+          attributes: ['id', 'weekday', 'meal_type', 'recipe_id', 'meal_order']
         });
 
         // Put the meals inside the plans
@@ -135,7 +135,7 @@ class PlansController {
         where: {
           plan_id: plan.id
         },
-        attributes: ['id', 'weekday', 'meal_type', 'recipe_id']
+        attributes: ['id', 'weekday', 'meal_type', 'recipe_id', 'meal_order']
       });
 
       // Put the meals inside the plan
@@ -199,7 +199,7 @@ class PlansController {
       where: {
         plan_id: updatedPlan.id
       },
-      attributes: ['id', 'weekday', 'meal_type', 'recipe_id']
+      attributes: ['id', 'weekday', 'meal_type', 'recipe_id', 'meal_order']
     });
 
     // Put the updatedMeals inside the plan

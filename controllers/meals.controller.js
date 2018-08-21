@@ -100,7 +100,7 @@ class MealsController {
       where: {
         plan_id: updatedPlan.id
       },
-      attributes: ['id', 'weekday', 'meal_type', 'recipe_id']
+      attributes: ['id', 'weekday', 'meal_type', 'recipe_id', 'meal_order']
     });
 
     // Put the updatedMeals inside the plan
