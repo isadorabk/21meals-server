@@ -115,7 +115,7 @@ class RecipesController {
       await Promise.all(recipes.map(async (recipe) => {
         const ingredients = await db.Recipe_ingredient.findAll({
           where: {
-            recipe_id: recipe.id
+            recipe_id: recipe.dataValues.id
           },
           attributes: ['id', 'ingredient_id', 'measure_id', 'amount'],
           include: [{
