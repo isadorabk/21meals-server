@@ -4,7 +4,7 @@
   "description": "Back-end of Mealee app",
   "main": "index.js",
   "scripts": {
-    "test": "jest ./tests",
+    "test": "NODE_ENV=test jest ./tests",
     "dev": "nodemon index.js",
     "start": "node index.js"
   },

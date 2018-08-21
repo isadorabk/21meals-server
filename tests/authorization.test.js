@@ -2,8 +2,6 @@
 
 const mockData = require('./mocks/index').mockData;
 const mockUser = mockData.mockUser;
-const UsersController = require('../controllers/users.controller.js');
-const usersController = new UsersController(mockUser);
 const authMiddleware = require('../middlewares/authorization.js')(mockUser);
 const next = jest.fn();
 const ctx = {};
@@ -25,12 +23,28 @@ describe('Authorization middleware', () => {
       authorization: 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImFiYzEyMyIsImlhdCI6MTUzNDg2NjY0N30.mGPITCU_ylJfNZxpjOjoBpFp2kg55KtwFnUdl6oGFbc',
     };
     await authMiddleware(ctx, next);
-    console.log(ctx);
-    
-    // expect(ctx.status).toEqual(200);
-    // expect(ctx.body).toEqual({
-    //   id: 123,
-    //   name: 'Mario Bros'
-    // });
+    expect(ctx.body).toEqual(mockData.user);
+  });
+
+  test('should return status 404 if the token is valid but there is no user', async () => {
+    ctx.headers = {
+      authorization: 'Bearer eyJhbGcIsInR5cCI6IkpXVCJ9.eyJpZCI6ImFiyIsImlhdCI6MTUzNDg2NjY0N30.mGPITCU_ylJfNZxpjOjoBpFp2kg55KtwFnUdl6oGFbc',
+    };
+    await authMiddleware(ctx, next);
+    expect(ctx.status).toEqual(404);
+    expect(ctx.body).toEqual({
+      errors: ['User does not exist.']
+    });
+  });
+
+  test('should throw an error if token is invalid', async () => {
+    try {
+      ctx.headers = {
+        authorization: 'Bearer eyJhbGcIsInR5cCI6IkpXVCJ9.eyJpZCI6ImFiyIsImlhdCI6MTUzNDg2NjY0N30.mGPITCU_ylJfNZxpjOjoBpFp2kg55KtwFnUdl6oGFbc',
+      };
+      await authMiddleware(ctx, next);
+    } catch (e) {
+      expect(e.message).toEqual('invalid token');
+    }
   });
 });
