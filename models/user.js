@@ -34,11 +34,15 @@ module.exports = (sequelize, DataTypes) => {
   User.associate = (models) => {
     User.hasMany(models.Recipe, {
       onDelete: 'CASCADE',
-      allowNull: false
+      foreignKey: {
+        allowNull: false
+      }
     });
     User.hasMany(models.Plan, {
       onDelete: 'CASCADE',
-      allowNull: false
+      foreignKey: {
+        allowNull: false
+      }
     });
   };
 

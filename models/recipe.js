@@ -32,17 +32,24 @@ module.exports = (sequelize, DataTypes) => {
   Recipe.associate = (models) => {
     Recipe.belongsTo(models.User, {
       onDelete: 'CASCADE',
-      allowNull: false
+      foreignKey: {
+        allowNull: false
+      }
     });
     Recipe.belongsToMany(models.Plan, {
-      through: 'Plan_recipe',
-      onDelete: 'CASCADE',
-      defaultValue: null
+      through: {
+        model: 'Plan_recipe',
+        unique: false
+      },
+      onDelete: 'CASCADE'
     });
     Recipe.belongsToMany(models.Ingredient, {
       through: 'Recipe_ingredient',
       onDelete: 'CASCADE',
-      allowNull: false
+      foreignKey: {
+        allowNull: false,
+        name: 'recipe_id'
+      }
     });
   };
 

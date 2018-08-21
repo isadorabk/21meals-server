@@ -15,8 +15,14 @@ const ingredientsController = new IngredientsController(db.Ingredient);
 const MeasuresController = require('../controllers/measures.controller');
 const measuresController = new MeasuresController(db.Measure);
 
+const IngredientsTypeController = require('../controllers/ingredients.type.controller');
+const ingredientsTypeController = new IngredientsTypeController(db.Ingredient_type);
+
 const RecipesController = require('../controllers/recipes.controller');
 const recipesController = new RecipesController(db.Recipe);
+
+const PlansController = require('../controllers/plans.controller');
+const plansController = new PlansController(db.Plan);
 
 // User routes
 router
@@ -44,5 +50,13 @@ router
   .get('/recipes/:recipe_id', authMiddleware, recipesController.getUsersRecipeById)
   .put('/recipes/:recipe_id', authMiddleware, recipesController.updateUsersRecipeById)
   .delete('/recipes/:recipe_id', authMiddleware, recipesController.deleteUsersRecipeById);
+
+// Plan routes
+router
+  .post('/plans', authMiddleware, plansController.createUsersPlan)
+  .get('/plans', authMiddleware, plansController.getUsersPlans)
+  .get('/plans/:plan_id', authMiddleware, plansController.getUsersPlanById)
+  .put('/plans/:plan_id', authMiddleware, plansController.updateUsersPlanById)
+  .delete('/plans/:plan_id', authMiddleware, plansController.deleteUsersPlanById);
 
 module.exports = router;
