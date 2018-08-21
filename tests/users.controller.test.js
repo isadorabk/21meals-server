@@ -1,44 +1,37 @@
 'use strict';
 
+const mockData = require('./mocks/index').mockData;
+const mockUser = mockData.mockUser;
 const UsersController = require('../controllers/users.controller.js');
-
-const mockUser = {
-  findOne: async () => {
-    return {
-      id: 123,
-      name: 'Mario Bros'
-    };
-  }
-};
-
 const usersController = new UsersController(mockUser);
 
-//TODO: This can be a spy waiting to be called.
-const next = () => {};
+const next = jest.fn();
+const ctx = {};
 
 describe('User controller', () => {
   describe('getUser()', () => {
-    test('should throw if not GET', async () => {
+    test('should throw an error if method not GET', async () => {
       try {
-        await usersController.getUser({}, next);
+        ctx.method = 'POST';
+        await usersController.getUser(ctx, next);
       } catch (e) {
         expect(e.message).toEqual('Method not allowed');
       }
     });
 
-    test('should authenticate an authenticated user', async () => {
-      const ctx = {
-        headers: {
-          authorization: 'Bearer 1234567890',
-        },
-        method: 'GET'
-      };
+    test('should returns status 404 if no user is passed in ctx', async () => {
+      ctx.method = 'GET';
       await usersController.getUser(ctx, next);
-      expect(ctx.status).toEqual(200);
-      expect(ctx.body).toEqual({
-        id: 123,
-        name: 'Mario Bros'
-      });
+      expect(ctx.status).toBe(404);
+      expect(ctx.body).toEqual({errors: ['User does not exist.']});
+    });
+
+    test('should returns status 200 and the user', async () => {
+      ctx.method = 'GET';
+      ctx.user = mockData.user;
+      await usersController.getUser(ctx, next);
+      expect(ctx.status).toBe(200);
+      expect(ctx.body).toEqual(ctx.user);
     });
   });
 });
