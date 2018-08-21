@@ -1,7 +1,6 @@
 'use strict';
 
 const router = require('koa-router')();
-const authMiddleware = require('../middlewares/authorization.js');
 const db = require('../models').db;
 db.setup();
 const RecipesController = require('../controllers/recipes.controller');
@@ -9,10 +8,10 @@ const recipesController = new RecipesController(db.Recipe);
 
 // Recipe routes
 router
-  .post('/', authMiddleware, recipesController.createUsersRecipe)
-  .get('/', authMiddleware, recipesController.getUsersRecipes)
-  .get('/:recipe_id', authMiddleware, recipesController.getUsersRecipeById)
-  .put('/:recipe_id', authMiddleware, recipesController.updateUsersRecipeById)
-  .delete('/:recipe_id', authMiddleware, recipesController.deleteUsersRecipeById);
+  .post('/', recipesController.createUsersRecipe)
+  .get('/', recipesController.getUsersRecipes)
+  .get('/:recipe_id', recipesController.getUsersRecipeById)
+  .put('/:recipe_id', recipesController.updateUsersRecipeById)
+  .delete('/:recipe_id', recipesController.deleteUsersRecipeById);
 
 module.exports = router;

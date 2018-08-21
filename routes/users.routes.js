@@ -9,8 +9,8 @@ const usersController = new UsersController(db.User);
 
 // User routes
 router
-  .get('/', authMiddleware, usersController.getUser)
-  .put('/', authMiddleware, usersController.updateUser)
-  .delete('/', authMiddleware, usersController.deleteUser);
+  .get('/', usersController.getUser)
+  .put('/', usersController.updateUser)
+  .delete('/', usersController.deleteUser);
 
 module.exports = router;
