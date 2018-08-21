@@ -13,7 +13,7 @@ class MeasuresController {
 
     // Find all measures
     const measures = await this.Measure.findAll({
-      attributes: ['id', 'name'],
+      attributes: ['id', 'name', 'short'],
     });
 
     if (measures) {

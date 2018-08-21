@@ -21,11 +21,23 @@ module.exports = (sequelize, DataTypes) => {
   Ingredient.associate = (models) => {
     Ingredient.belongsTo(models.Ingredient_type, {
       onDelete: 'CASCADE',
+      foreignKey: {
+        allowNull: false
+      }
     });
     Ingredient.belongsToMany(models.Recipe, {
       through: 'Recipe_ingredient',
       onDelete: 'CASCADE',
-      allowNull: false,
+      foreignKey: {
+        allowNull: false,
+        name: 'ingredient_id'
+      }
+    });
+    Ingredient.hasOne(models.Shopping_list_item, {
+      onDelete: 'CASCADE',
+      foreignKey: {
+        allowNull: false
+      }
     });
   };
 
