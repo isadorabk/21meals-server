@@ -15,7 +15,6 @@ class MeasuresController {
     const measures = await this.Measure.findAll({
       attributes: ['id', 'name', 'short'],
     });
-
     if (measures) {
       ctx.body = measures.map(el => el.dataValues);
     } else {
