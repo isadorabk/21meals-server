@@ -88,7 +88,7 @@ class PlansController {
     });
 
     if (plans) {
-      let res = [];
+      const res = [];
 
       // Find list of meals for each plan
       await Promise.all(plans.map(async (plan) => {
@@ -164,7 +164,7 @@ class PlansController {
     data.name = data.name.toLowerCase();
     
     // Update the plan with the specific id
-    let plan = filterProps(data, ['name']);
+    const plan = filterProps(data, ['name']);
     const plan_id = ctx.params.plan_id;
     plan.user_id = ctx.user.id;
     await this.Plan.update(plan, {

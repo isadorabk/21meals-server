@@ -54,7 +54,7 @@ class UsersController {
         res.token = token;
 
         // Create first empty plan for the user
-        let plan = filterProps(firstPlan, ['name']);
+        const plan = filterProps(firstPlan, ['name']);
         plan.user_id = res.id;
         const newPlan = await db.Plan.create(plan);
 

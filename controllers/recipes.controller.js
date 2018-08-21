@@ -110,7 +110,7 @@ class RecipesController {
     });
 
     if (recipes) {
-      let res = [];
+      const res = [];
       
       // Find list of ingredients for each recipe
       await Promise.all(recipes.map(async (recipe) => {
