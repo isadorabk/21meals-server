@@ -3,6 +3,7 @@
 const mockData = require('./mocks/index').mockData;
 const UsersController = require('../controllers/users.controller.js');
 const usersController = new UsersController(mockData.mockUser);
+const usersControllerNotFound = new UsersController(mockData.mockUserNotFound);
 
 const next = jest.fn();
 let ctx = {};
@@ -16,6 +17,11 @@ jest.mock('../models', () => ({
 
 jest.mock('jsonwebtoken', () => ({
   sign: jest.fn()
+}));
+
+jest.mock('bcrypt', () => ({
+  compare: jest.fn(() => true),
+  hash: jest.fn()
 }));
 
 describe('User controller', () => {
@@ -108,7 +114,6 @@ describe('User controller', () => {
         body: { ...mockData.mockNewUser
         }
       };
-      const usersControllerNotFound = new UsersController(mockData.mockUserNotFound);
       await usersControllerNotFound.createUser(ctx, next);
       expect(ctx.status).toBe(201);
       expect(ctx.body).toEqual(mockData.mockUserCreated);
@@ -137,8 +142,26 @@ describe('User controller', () => {
       }
     });
 
+    test('should returns status 404 if there is no user with the id provided', async () => {
+      ctx.method = 'GET';
+      ctx.headers = {
+        authorization: 'Basic oisdjaiosd',
+      };
+      await usersControllerNotFound.signIn(ctx, next);
+      expect(ctx.status).toBe(404);
+      expect(ctx.body).toEqual({
+        errors: ['User does not exist.']
+      });
+    });
+
     test('should returns status 200 and the user', async () => {
-      
+      ctx.method = 'GET';
+      ctx.headers = {
+        authorization: 'Basic oisdjaiosd',
+      };
+      await usersController.signIn(ctx, next);
+      expect(ctx.status).toBe(200);
+      expect(ctx.body).toEqual(mockData.mockUserCreated);
     });
   });
 });

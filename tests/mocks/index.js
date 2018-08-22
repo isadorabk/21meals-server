@@ -51,6 +51,13 @@ exports.mockData = {
           user_id: 'abc123'
         }
       };
+    },
+    findOne: async () => {
+      return {
+        dataValues: {
+          id: 'def456'
+        }
+      };
     }
   },
 
