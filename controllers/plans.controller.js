@@ -92,14 +92,15 @@ class PlansController {
 
       // Find list of meals for each plan
       await Promise.all(plans.map(async (plan) => {
-        const meals = await db.Plan_recipe.findAll({
+        let meals = await db.Plan_recipe.findAll({
           where: {
-            plan_id: plan.id
+            plan_id: plan.dataValues.id
           },
           attributes: ['id', 'weekday', 'meal_type', 'recipe_id', 'meal_order']
         });
 
         // Put the meals inside the plans
+        meals = meals.map(el => el.dataValues);
         const planWithMeals = {
           ...plan.dataValues,
           meals
@@ -131,14 +132,15 @@ class PlansController {
 
     if (plan) {
       // Find all meals for this plan
-      const meals = await db.Plan_recipe.findAll({
+      let meals = await db.Plan_recipe.findAll({
         where: {
-          plan_id: plan.id
+          plan_id: plan.dataValues.id
         },
         attributes: ['id', 'weekday', 'meal_type', 'recipe_id', 'meal_order']
       });
 
       // Put the meals inside the plan
+      meals = meals.map(el => el.dataValues);
       const planWithMeals = {
         ...plan.dataValues,
         meals
@@ -195,14 +197,15 @@ class PlansController {
       attributes: ['id', 'name']
     });
 
-    const updatedMeals = await db.Plan_recipe.findAll({
+    let updatedMeals = await db.Plan_recipe.findAll({
       where: {
-        plan_id: updatedPlan.id
+        plan_id: updatedPlan.dataValues.id
       },
       attributes: ['id', 'weekday', 'meal_type', 'recipe_id', 'meal_order']
     });
 
     // Put the updatedMeals inside the plan
+    updatedMeals = meals.map(el => el.dataValues);
     const updatedPlanWithMeals = {
       ...updatedPlan.dataValues,
       meals: updatedMeals

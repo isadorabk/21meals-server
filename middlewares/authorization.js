@@ -1,13 +1,12 @@
-const db = require('../models').db;
 const jwt = require('jsonwebtoken');
 
-const authorize = async (ctx, next) => {
+const authorize = (User) => async (ctx, next) => {
   const [strategy, token] = ctx.headers.authorization.split(' ');
 
   if (strategy === 'Bearer') {
     try {
       const tokenDecoded = jwt.verify(token, process.env.JWT_SECRET);
-      const user = await db.User.findOne({
+      const user = await User.findOne({
         where: {
           id: tokenDecoded.id
         },

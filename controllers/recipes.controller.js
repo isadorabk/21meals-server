@@ -48,7 +48,6 @@ class RecipesController {
             recipe_id: newRecipe.dataValues.id
           };
           await db.Recipe_ingredient.create(recipeIngredient);
-          return recipeIngredient;
         }));
 
         // Find all ingredients for this recipe
@@ -90,7 +89,7 @@ class RecipesController {
     } else {
       ctx.status = 406;
       ctx.body = {
-        errors: ['Name of the recipe needed']
+        errors: ['Title of the recipe needed']
       };
       return;
     }
@@ -116,7 +115,7 @@ class RecipesController {
       await Promise.all(recipes.map(async (recipe) => {
         const ingredients = await db.Recipe_ingredient.findAll({
           where: {
-            recipe_id: recipe.id
+            recipe_id: recipe.dataValues.id
           },
           attributes: ['id', 'ingredient_id', 'measure_id', 'amount'],
           include: [{

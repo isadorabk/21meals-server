@@ -44,7 +44,7 @@ class IngredientsController {
             id: data.ingredient_type_id
           }
         });
-        res.ingredient_type = ingredient_type.name;
+        res.ingredient_type = ingredient_type.dataValues.name;
 
         ctx.body = [res];
         ctx.status = 201;

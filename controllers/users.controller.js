@@ -35,7 +35,7 @@ class UsersController {
 
       // if there's already a user, send an error
       if (user) {
-        ctx.status = 401;
+        ctx.status = 403;
         ctx.body = {
           errors: ['User already exists.']
         };
@@ -143,7 +143,7 @@ class UsersController {
       ctx.status = 200;
       await next();
     } else {
-      // Send an error if there's no user with this email
+      // Send an error if there's no user
       ctx.status = 404;
       ctx.body = {
         errors: ['User does not exist.']
