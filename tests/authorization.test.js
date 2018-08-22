@@ -1,8 +1,7 @@
 'use strict';
 
 const mockData = require('./mocks/index').mockData;
-const mockUser = mockData.mockUser;
-const authMiddleware = require('../middlewares/authorization.js')(mockUser);
+const authMiddleware = require('../middlewares/authorization.js')(mockData.mockUser);
 const authMiddlewareUserNotFound = require('../middlewares/authorization.js')(mockData.mockUserNotFound);
 const next = jest.fn();
 let ctx = {};
@@ -26,7 +25,12 @@ describe('Authorization middleware', () => {
       authorization: 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImFiYzEyMyIsImlhdCI6MTUzNDg2NjY0N30.mGPITCU_ylJfNZxpjOjoBpFp2kg55KtwFnUdl6oGFbc',
     };
     await authMiddleware(ctx, next);
-    expect(ctx.user).toEqual(mockData.user);
+    expect(ctx.user).toEqual({
+      id: 'abc123',
+      email: 'mario@mariobros.com',
+      first_name: 'Mario',
+      last_name: 'Bros'
+    });
   });
 
   test('should return status 404 if the token is valid but there is no user', async () => {
