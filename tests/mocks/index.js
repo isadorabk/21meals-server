@@ -26,14 +26,7 @@ exports.mockData = {
     }
   },
 
-  user: {
-    id: 'abc123',
-    email: 'mario@mariobros.com',
-    first_name: 'Mario',
-    last_name: 'Bros'
-  },
-
-  createUser: {
+  newUser: {
     email: 'mario@mariobros.com',
     first_name: 'Mario',
     last_name: 'Bros',
@@ -45,8 +38,35 @@ exports.mockData = {
     first_name: 'Mario',
     last_name: 'Bros',
     email: 'mario@mariobros.com',
-    token: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImFiYzEyMyIsImlhdCI6MTUzNDg2NjY0N30.mGPITCU_ylJfNZxpjOjoBpFp2kg55KtwFnUdl6oGFbc',
+    // token: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImFiYzEyMyIsImlhdCI6MTUzNDkyOTQ5OSwiZXhwIjoxNTM3NTIxNDk5fQ.Kx85VRp5eeCbjUUXe4TeQgcRUfU-wyoGA1xOurb3cnM',
     plan_id: 'def456'
+  },
+
+  mockPlan: {
+    create: async () => {
+      return {
+        dataValues: {
+          id: 'def456',
+          name: 'my first plan',
+          user_id: 'abc123'
+        }
+      };
+    }
+  },
+  mockPlanRecipe: {
+    create: async () => {
+      return {
+        dataValues: {
+          id: 'ghi789',
+          meal_order: 13,
+          weekday: 'monday',
+          meal_type: 'dinner',
+          recipe_id: null,
+          plan_id: 'def456'
+        }
+      };
+    }
   }
+  
 
 };

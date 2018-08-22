@@ -6,6 +6,13 @@ const jwt = require('jsonwebtoken');
 const filterProps = require('../services/utils.js').filterProps;
 const db = require('../models').db;
 const firstPlan = require('../services/firstPlan').firstPlan;
+const path = process.env.NODE_ENV === 'test' ?
+  __dirname + '/../.env.test' :
+  __dirname + '/../.env';
+
+require('dotenv').config({
+  path
+});
 
 class UsersController {
   constructor (userModel) {
