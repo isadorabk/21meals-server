@@ -23,7 +23,7 @@ class UsersController {
     if (ctx.method !== 'POST') throw new Error('Method not allowed');
 
     const userData = ctx.request.body;
-    
+
     //Check if the request has email and password
     if (userData.email && userData.password) {
       // Check if there's already an user with this email
@@ -57,7 +57,7 @@ class UsersController {
         let plan = filterProps(firstPlan, ['name']);
         plan.user_id = res.id;
         const newPlan = await db.Plan.create(plan);
-
+        
         // Create plan_recipe for each meal
         const meals = firstPlan.meals;
         await Promise.all(meals.map(async (meal) => {
