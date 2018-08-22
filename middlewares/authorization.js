@@ -1,11 +1,4 @@
 const jwt = require('jsonwebtoken');
-const path = process.env.NODE_ENV === 'test' ?
-  __dirname + '/../.env.test' :
-  __dirname + '/../.env';
-
-require('dotenv').config({
-  path
-});
 
 const authorize = (User) => async (ctx, next) => {
   const [strategy, token] = ctx.headers.authorization.split(' ');

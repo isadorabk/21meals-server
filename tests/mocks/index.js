@@ -38,7 +38,7 @@ exports.mockData = {
     first_name: 'Mario',
     last_name: 'Bros',
     email: 'mario@mariobros.com',
-    // token: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImFiYzEyMyIsImlhdCI6MTUzNDkyOTQ5OSwiZXhwIjoxNTM3NTIxNDk5fQ.Kx85VRp5eeCbjUUXe4TeQgcRUfU-wyoGA1xOurb3cnM',
+    token: undefined,
     plan_id: 'def456'
   },
 

@@ -14,6 +14,10 @@ jest.mock('../models', () => ({
   }
 }));
 
+jest.mock('jsonwebtoken', () => ({
+  sign: jest.fn()
+}));
+
 describe('User controller', () => {
   beforeEach(() => ctx = {});
 
@@ -106,9 +110,8 @@ describe('User controller', () => {
       };
       const usersControllerNotFound = new UsersController(mockData.mockUserNotFound);
       await usersControllerNotFound.createUser(ctx, next);
-      const { token, ...res} = ctx.body;
       expect(ctx.status).toBe(201);
-      expect(res).toEqual(mockData.userCreated);
+      expect(ctx.body).toEqual(mockData.userCreated);
     });
 
 

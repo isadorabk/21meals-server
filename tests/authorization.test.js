@@ -6,12 +6,20 @@ const authMiddlewareUserNotFound = require('../middlewares/authorization.js')(mo
 const next = jest.fn();
 let ctx = {};
 
+jest.mock('jsonwebtoken', () => ({
+  verify: jest.fn(() => {
+    return {
+      id: 1
+    };
+  })
+}));
+
 describe('Authorization middleware', () => {
   beforeEach(() => ctx = {});
 
   test('should return a status 401 if the authentication strategy is not Bearer', async () => {
     ctx.headers = {
-      authorization: 'Basic eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImFiYzEyMyIsImlhdCI6MTUzNDg2NjY0N30.mGPITCU_ylJfNZxpjOjoBpFp2kg55KtwFnUdl6oGFbc',
+      authorization: 'Basic vnjsjpkvbjvbwv',
     };
     await authMiddleware(ctx, next);
     expect(ctx.status).toEqual(401);
@@ -22,7 +30,7 @@ describe('Authorization middleware', () => {
 
   test('should authenticate an authenticated user', async () => {
     ctx.headers = {
-      authorization: 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImFiYzEyMyIsImlhdCI6MTUzNDg2NjY0N30.mGPITCU_ylJfNZxpjOjoBpFp2kg55KtwFnUdl6oGFbc',
+      authorization: 'Bearer dvdgfsag',
     };
     await authMiddleware(ctx, next);
     expect(ctx.user).toEqual({
@@ -35,7 +43,7 @@ describe('Authorization middleware', () => {
 
   test('should return status 404 if the token is valid but there is no user', async () => {
     ctx.headers = {
-      authorization: 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImFiYzEyMyIsImlhdCI6MTUzNDg2NjY0N30.mGPITCU_ylJfNZxpjOjoBpFp2kg55KtwFnUdl6oGFbc',
+      authorization: 'Bearer bsfpuihsdafuipsadbvj',
     };
     await authMiddlewareUserNotFound(ctx, next);
     expect(ctx.status).toEqual(404);
@@ -44,14 +52,4 @@ describe('Authorization middleware', () => {
     });
   });
 
-  test('should throw an error if token is invalid', async () => {
-    try {
-      ctx.headers = {
-        authorization: 'Bearer eyJhbGcIsInR5cCI6IkpXVCJ9.eyJpZCI6ImFiyIsImlhdCI6MTUzNDg2NjY0N30.mGPITCU_ylJfNZxpjOjoBpFp2kg55KtwFnUdl6oGFbc',
-      };
-      await authMiddleware(ctx, next);
-    } catch (e) {
-      expect(e.message).toEqual('invalid token');
-    }
-  });
 });

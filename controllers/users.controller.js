@@ -6,13 +6,6 @@ const jwt = require('jsonwebtoken');
 const filterProps = require('../services/utils.js').filterProps;
 const db = require('../models').db;
 const firstPlan = require('../services/firstPlan').firstPlan;
-const path = process.env.NODE_ENV === 'test' ?
-  __dirname + '/../.env.test' :
-  __dirname + '/../.env';
-
-require('dotenv').config({
-  path
-});
 
 class UsersController {
   constructor (userModel) {
@@ -64,7 +57,7 @@ class UsersController {
         let plan = filterProps(firstPlan, ['name']);
         plan.user_id = res.id;
         const newPlan = await db.Plan.create(plan);
-        
+
         // Create plan_recipe for each meal
         const meals = firstPlan.meals;
         await Promise.all(meals.map(async (meal) => {
