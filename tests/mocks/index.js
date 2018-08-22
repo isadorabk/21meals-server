@@ -26,14 +26,14 @@ exports.mockData = {
     }
   },
 
-  newUser: {
+  mockNewUser: {
     email: 'mario@mariobros.com',
     first_name: 'Mario',
     last_name: 'Bros',
     password: 'YmFuYW5hcw=='
   },
 
-  userCreated: {
+  mockUserCreated: {
     id: 'abc123',
     first_name: 'Mario',
     last_name: 'Bros',
@@ -53,6 +53,7 @@ exports.mockData = {
       };
     }
   },
+
   mockPlanRecipe: {
     create: async () => {
       return {

@@ -78,7 +78,7 @@ describe('User controller', () => {
     test('should send status 406 if a password is not provide', async () => {
       ctx.method = 'POST';
       ctx.request = {
-        body: { ...mockData.newUser
+        body: { ...mockData.mockNewUser
         }
       };
       delete ctx.request.body.password;
@@ -92,7 +92,7 @@ describe('User controller', () => {
     test('should send status 403 if there is already an user with this email', async () => {
       ctx.method = 'POST';
       ctx.request = {
-        body: { ...mockData.newUser
+        body: { ...mockData.mockNewUser
         }
       };
       await usersController.createUser(ctx, next);
@@ -105,15 +105,40 @@ describe('User controller', () => {
     test('should send status 201 if the user is created', async () => {
       ctx.method = 'POST';
       ctx.request = {
-        body: { ...mockData.newUser
+        body: { ...mockData.mockNewUser
         }
       };
       const usersControllerNotFound = new UsersController(mockData.mockUserNotFound);
       await usersControllerNotFound.createUser(ctx, next);
       expect(ctx.status).toBe(201);
-      expect(ctx.body).toEqual(mockData.userCreated);
+      expect(ctx.body).toEqual(mockData.mockUserCreated);
+    });
+  });
+
+  describe('signIn()', () => {
+    test('should throw an error if method not GET', async () => {
+      try {
+        ctx.method = 'POST';
+        await usersController.signIn(ctx, next);
+      } catch (e) {
+        expect(e.message).toEqual('Method not allowed');
+      }
     });
 
+    test('should return a status 401 if there is not a basic authentication', async () => {
+      try {
+        ctx.method = 'GET';
+        ctx.headers = {
+          authorization: 'Bearer',
+        };
+        await usersController.signIn(ctx, next);
+      } catch (e) {
+        expect(e.message).toEqual('Missing basic authentication header');
+      }
+    });
 
+    test('should returns status 200 and the user', async () => {
+      
+    });
   });
 });
