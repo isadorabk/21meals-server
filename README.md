@@ -1,8 +1,6 @@
-![](/Users/isadorabk/Codeworks/examples%20github/logo.png)
+![](https://user-images.githubusercontent.com/35597953/44659838-df236f80-aa05-11e8-86c8-7a4e1f8d8e49.png)
 
 
-
-# Welcome to 21Meals!
 
 21Meals is a meal planner and a shopping organizer that allows you to input your favorite recipes, arrange them through the week and have a customized grocery list based on your weekly plan.
 
@@ -10,9 +8,11 @@ For the client repo, please visit: [21Meals - client](https://github.com/isadora
 
 
 
+
 ## Screenshots
 
-![](/Users/isadorabk/Codeworks/examples%20github/21meals-screenshots.png)
+![](https://user-images.githubusercontent.com/35597953/44659842-e34f8d00-aa05-11e8-8f6e-dcf432928d0f.png)
+
 
 
 
@@ -80,7 +80,7 @@ For the client repo, please visit: [21Meals - client](https://github.com/isadora
 
 1. ### Postman collection
 
-   Use the [21Meals.postman_collection.json](https://github.com/isadorabk/21meals-server/blob/develop/_docs/Mealee.postman_collection.json) to test all API endpoints.
+   Use the [21Meals.postman_collection.json](https://github.com/isadorabk/21meals-server/blob/develop/_docs/21meals.postman_collection.json) to test all API endpoints.
 
 
 1. ### Set up the front end
@@ -103,6 +103,7 @@ Back-end built with:
 - Isadora Bassetto Kwiatkowski - [GitHub](https://github.com/isadorabk) - [LinkedIn](https://www.linkedin.com/in/isadora-bassetto-kwiatkowski/)
 - Jordi M. Zambrano - [GitHub](https://github.com/nickschoey) - [LinkedIn](https://www.linkedin.com/in/jordi-zambrano/)
 - Volodymyr Gromoglasov - [GitHub](https://github.com/gromoglasov) - [LinkedIn](https://www.linkedin.com/in/gromoglasov/)
+
 
 
 

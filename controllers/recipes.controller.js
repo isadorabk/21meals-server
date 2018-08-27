@@ -30,7 +30,7 @@ class RecipesController {
       });
       // if there's already a recipe, send an error
       if (recipe) {
-        ctx.status = 401;
+        ctx.status = 403;
         ctx.body = {
           errors: ['Recipe already exists.']
         };
@@ -109,7 +109,7 @@ class RecipesController {
     });
 
     if (recipes) {
-      let res = [];
+      const res = [];
       
       // Find list of ingredients for each recipe
       await Promise.all(recipes.map(async (recipe) => {
@@ -126,25 +126,25 @@ class RecipesController {
 
         // Get the name of the measures for each ingredient
         const ingredientsWithMeasure = ingredients.map(el => {
-          const measure = el.dataValues.measure_id ? el.dataValues.Measure.dataValues.name : null;
-          const short_measure = el.dataValues.measure_id ? el.dataValues.Measure.dataValues.short : null;
-          const result = {
-            ...el.dataValues,
-            measure,
-            short_measure
-          };
-          delete result.Measure;
-          delete result.measure_id;
-          return result;
-        });
-
-        // Put the ingredients inside the recipes
-        const recipeWithIngredients = {
-          ...recipe.dataValues,
-          ingredients: ingredientsWithMeasure
+        const measure = el.dataValues.measure_id ? el.dataValues.Measure.dataValues.name : null;
+        const short_measure = el.dataValues.measure_id ? el.dataValues.Measure.dataValues.short : null;
+        const result = {
+          ...el.dataValues,
+          measure,
+          short_measure
         };
-        res.push(recipeWithIngredients);
-      }));
+        delete result.Measure;
+        delete result.measure_id;
+        return result;
+      });
+
+      // Put the ingredients inside the recipes
+      const recipeWithIngredients = {
+        ...recipe.dataValues,
+        ingredients: ingredientsWithMeasure
+      };
+      res.push(recipeWithIngredients);
+    }));
 
       ctx.body = res;
     } else {
@@ -153,7 +153,7 @@ class RecipesController {
     }
     ctx.status = 200;
   }
-
+  
   async getUsersRecipeById (ctx, next) {
     // Check if the method is correct
     if (ctx.method !== 'GET') throw new Error('Method not allowed');

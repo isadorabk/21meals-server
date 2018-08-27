@@ -23,7 +23,7 @@ class UsersController {
     if (ctx.method !== 'POST') throw new Error('Method not allowed');
 
     const userData = ctx.request.body;
-    
+
     //Check if the request has email and password
     if (userData.email && userData.password) {
       // Check if there's already an user with this email
@@ -54,7 +54,7 @@ class UsersController {
         res.token = token;
 
         // Create first empty plan for the user
-        let plan = filterProps(firstPlan, ['name']);
+        const plan = filterProps(firstPlan, ['name']);
         plan.user_id = res.id;
         const newPlan = await db.Plan.create(plan);
 
