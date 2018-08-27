@@ -13,17 +13,16 @@ const authorize = (User) => async (ctx, next) => {
         attributes: ['id', 'email', 'first_name', 'last_name']
       });
       if (!user) {
-        ctx.status = 401;
+        ctx.status = 404;
         ctx.body = {
-          errors: ['Token is incorrect.']
+          errors: ['User does not exist.']
         };
         return;
       }
       ctx.user = user.dataValues;
       await next();
     } catch (error) {
-      //eslint-disable-next-line
-      console.error(error);
+      throw error;
     }
   } else {
     ctx.status = 401;

@@ -23,7 +23,7 @@ class UsersController {
     if (ctx.method !== 'POST') throw new Error('Method not allowed');
 
     const userData = ctx.request.body;
-    
+
     //Check if the request has email and password
     if (userData.email && userData.password) {
       // Check if there's already an user with this email
