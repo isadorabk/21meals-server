@@ -54,7 +54,7 @@ class PlansController {
           where: {
             plan_id: newPlan.id
           },
-          attributes: ['id', 'weekday', 'meal_type', 'recipe_id']
+          attributes: ['id', 'weekday', 'meal_type', 'recipe_id', 'meal_order']
         });
 
         let res = filterProps(newPlan.dataValues, ['id', 'name', 'user_id']);
@@ -78,24 +78,29 @@ class PlansController {
     // Check if the method is correct
     if (ctx.method !== 'GET') throw new Error('Method not allowed');
 
-    // Find all plans
+    // Find all plans from the user
+    const user_id = ctx.user.id;
     const plans = await this.Plan.findAll({
+      where: {
+        user_id
+      },
       attributes: ['id', 'name']
     });
 
     if (plans) {
-      let res = [];
+      const res = [];
 
       // Find list of meals for each plan
       await Promise.all(plans.map(async (plan) => {
-        const meals = await db.Plan_recipe.findAll({
+        let meals = await db.Plan_recipe.findAll({
           where: {
-            plan_id: plan.id
+            plan_id: plan.dataValues.id
           },
-          attributes: ['id', 'weekday', 'meal_type', 'recipe_id']
+          attributes: ['id', 'weekday', 'meal_type', 'recipe_id', 'meal_order']
         });
 
         // Put the meals inside the plans
+        meals = meals.map(el => el.dataValues);
         const planWithMeals = {
           ...plan.dataValues,
           meals
@@ -127,14 +132,15 @@ class PlansController {
 
     if (plan) {
       // Find all meals for this plan
-      const meals = await db.Plan_recipe.findAll({
+      let meals = await db.Plan_recipe.findAll({
         where: {
-          plan_id: plan.id
+          plan_id: plan.dataValues.id
         },
-        attributes: ['id', 'weekday', 'meal_type', 'recipe_id']
+        attributes: ['id', 'weekday', 'meal_type', 'recipe_id', 'meal_order']
       });
 
       // Put the meals inside the plan
+      meals = meals.map(el => el.dataValues);
       const planWithMeals = {
         ...plan.dataValues,
         meals
@@ -160,7 +166,7 @@ class PlansController {
     data.name = data.name.toLowerCase();
     
     // Update the plan with the specific id
-    let plan = filterProps(data, ['name']);
+    const plan = filterProps(data, ['name']);
     const plan_id = ctx.params.plan_id;
     plan.user_id = ctx.user.id;
     await this.Plan.update(plan, {
@@ -191,14 +197,15 @@ class PlansController {
       attributes: ['id', 'name']
     });
 
-    const updatedMeals = await db.Plan_recipe.findAll({
+    let updatedMeals = await db.Plan_recipe.findAll({
       where: {
-        plan_id: updatedPlan.id
+        plan_id: updatedPlan.dataValues.id
       },
-      attributes: ['id', 'weekday', 'meal_type', 'recipe_id']
+      attributes: ['id', 'weekday', 'meal_type', 'recipe_id', 'meal_order']
     });
 
     // Put the updatedMeals inside the plan
+    updatedMeals = meals.map(el => el.dataValues);
     const updatedPlanWithMeals = {
       ...updatedPlan.dataValues,
       meals: updatedMeals

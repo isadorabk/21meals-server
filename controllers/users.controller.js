@@ -5,6 +5,7 @@ const atob = require('atob');
 const jwt = require('jsonwebtoken');
 const filterProps = require('../services/utils.js').filterProps;
 const db = require('../models').db;
+const firstPlan = require('../services/firstPlan').firstPlan;
 
 class UsersController {
   constructor (userModel) {
@@ -22,7 +23,7 @@ class UsersController {
     if (ctx.method !== 'POST') throw new Error('Method not allowed');
 
     const userData = ctx.request.body;
-    
+
     //Check if the request has email and password
     if (userData.email && userData.password) {
       // Check if there's already an user with this email
@@ -34,7 +35,7 @@ class UsersController {
 
       // if there's already a user, send an error
       if (user) {
-        ctx.status = 401;
+        ctx.status = 403;
         ctx.body = {
           errors: ['User already exists.']
         };
@@ -46,11 +47,29 @@ class UsersController {
         const { hash_password, updated_at, created_at, ...res } = newUser.dataValues;
         // token expires in 30 days
         const token = jwt.sign({
-          id: res.id
+          id: res.id,
         }, process.env.JWT_SECRET, {
           expiresIn: 2592000
         });
         res.token = token;
+
+        // Create first empty plan for the user
+        const plan = filterProps(firstPlan, ['name']);
+        plan.user_id = res.id;
+        const newPlan = await db.Plan.create(plan);
+
+        // Create plan_recipe for each meal
+        const meals = firstPlan.meals;
+        await Promise.all(meals.map(async (meal) => {
+          const planRecipe = {
+            ...meal,
+            plan_id: newPlan.dataValues.id,
+          };
+          await db.Plan_recipe.create(planRecipe);
+        }));
+
+        res.plan_id = newPlan.dataValues.id;
+
         ctx.body = res;
         ctx.status = 201;
       }
@@ -85,11 +104,21 @@ class UsersController {
         const { hash_password, ...res } = user.dataValues;
         // token expires in 30 days
         const token = jwt.sign({
-          id: res.id
+          id: res.id,
         }, process.env.JWT_SECRET, {
           expiresIn: 2592000
         });
         res.token = token;
+
+        // get first plan id
+        const firstPlan = await db.Plan.findOne({
+          where: {
+            user_id: res.id
+          },
+          attributes: ['id']
+        });
+        res.plan_id = firstPlan.dataValues.id;
+
         ctx.body = res;
         ctx.status = 200;
       } else {
@@ -114,7 +143,7 @@ class UsersController {
       ctx.status = 200;
       await next();
     } else {
-      // Send an error if there's no user with this email
+      // Send an error if there's no user
       ctx.status = 404;
       ctx.body = {
         errors: ['User does not exist.']

@@ -30,7 +30,7 @@ class RecipesController {
       });
       // if there's already a recipe, send an error
       if (recipe) {
-        ctx.status = 401;
+        ctx.status = 403;
         ctx.body = {
           errors: ['Recipe already exists.']
         };
@@ -48,7 +48,6 @@ class RecipesController {
             recipe_id: newRecipe.dataValues.id
           };
           await db.Recipe_ingredient.create(recipeIngredient);
-          return recipeIngredient;
         }));
 
         // Find all ingredients for this recipe
@@ -90,7 +89,7 @@ class RecipesController {
     } else {
       ctx.status = 406;
       ctx.body = {
-        errors: ['Name of the recipe needed']
+        errors: ['Title of the recipe needed']
       };
       return;
     }
@@ -100,19 +99,23 @@ class RecipesController {
     // Check if the method is correct
     if (ctx.method !== 'GET') throw new Error('Method not allowed');
 
-    // Find all recipes
+    // Find all recipes from the user
+    const user_id = ctx.user.id;
     const recipes = await this.Recipe.findAll({
+      where: {
+        user_id
+      },
       attributes: ['id', 'title', 'instructions', 'serves', 'photo']
     });
 
     if (recipes) {
-      let res = [];
+      const res = [];
       
       // Find list of ingredients for each recipe
       await Promise.all(recipes.map(async (recipe) => {
         const ingredients = await db.Recipe_ingredient.findAll({
           where: {
-            recipe_id: recipe.id
+            recipe_id: recipe.dataValues.id
           },
           attributes: ['id', 'ingredient_id', 'measure_id', 'amount'],
           include: [{

@@ -33,6 +33,12 @@ module.exports = (sequelize, DataTypes) => {
         name: 'ingredient_id'
       }
     });
+    Ingredient.hasOne(models.Shopping_list_item, {
+      onDelete: 'CASCADE',
+      foreignKey: {
+        allowNull: false
+      }
+    });
   };
 
   return Ingredient;

@@ -11,8 +11,7 @@ module.exports = (sequelize, DataTypes) => {
     },
     title: {
       allowNull: false,
-      type: DataTypes.STRING(511),
-      unique: true
+      type: DataTypes.STRING(511)
     },
     instructions: {
       type: DataTypes.STRING(1023)

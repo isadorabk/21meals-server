@@ -1,30 +1,28 @@
-const db = require('../models').db;
 const jwt = require('jsonwebtoken');
 
-const authorize = async (ctx, next) => {
+const authorize = (User) => async (ctx, next) => {
   const [strategy, token] = ctx.headers.authorization.split(' ');
 
   if (strategy === 'Bearer') {
     try {
       const tokenDecoded = jwt.verify(token, process.env.JWT_SECRET);
-      const user = await db.User.findOne({
+      const user = await User.findOne({
         where: {
           id: tokenDecoded.id
         },
         attributes: ['id', 'email', 'first_name', 'last_name']
       });
       if (!user) {
-        ctx.status = 401;
+        ctx.status = 404;
         ctx.body = {
-          errors: ['Token is incorrect.']
+          errors: ['User does not exist.']
         };
         return;
       }
       ctx.user = user.dataValues;
       await next();
     } catch (error) {
-      //eslint-disable-next-line
-      console.error(error);
+      throw error;
     }
   } else {
     ctx.status = 401;
