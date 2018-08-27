@@ -26,7 +26,6 @@ For the client repo, please visit: [21Meals - client](https://github.com/isadora
 
 
 
-
 ### Running the server
 
 1. #### Clone the repo.
@@ -68,7 +67,6 @@ For the client repo, please visit: [21Meals - client](https://github.com/isadora
 
 
 
-
 ## Usage
 
 1. ### Start the server:
@@ -90,7 +88,6 @@ For the client repo, please visit: [21Meals - client](https://github.com/isadora
    Go to [21Meals - client](https://github.com/isadorabk/21meals-client) and follow the instructions in the README.md file.
 
 
-
 ## Tech Stack
 
 Back-end built with:
@@ -98,7 +95,6 @@ Back-end built with:
 - [Koa](https://koajs.com/)
 - [mySQL](https://www.mysql.com/)
 - [Sequelize](http://docs.sequelizejs.com/)
-
 
 
 
