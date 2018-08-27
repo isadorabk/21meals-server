@@ -54,7 +54,7 @@ class PlansController {
           where: {
             plan_id: newPlan.id
           },
-          attributes: ['id', 'weekday', 'meal_type', 'recipe_id']
+          attributes: ['id', 'weekday', 'meal_type', 'recipe_id', 'meal_order']
         });
 
         let res = filterProps(newPlan.dataValues, ['id', 'name', 'user_id']);
@@ -78,13 +78,17 @@ class PlansController {
     // Check if the method is correct
     if (ctx.method !== 'GET') throw new Error('Method not allowed');
 
-    // Find all plans
+    // Find all plans from the user
+    const user_id = ctx.user.id;
     const plans = await this.Plan.findAll({
+      where: {
+        user_id
+      },
       attributes: ['id', 'name']
     });
 
     if (plans) {
-      let res = [];
+      const res = [];
 
       // Find list of meals for each plan
       await Promise.all(plans.map(async (plan) => {
@@ -92,7 +96,7 @@ class PlansController {
           where: {
             plan_id: plan.id
           },
-          attributes: ['id', 'weekday', 'meal_type', 'recipe_id']
+          attributes: ['id', 'weekday', 'meal_type', 'recipe_id', 'meal_order']
         });
 
         // Put the meals inside the plans
@@ -131,7 +135,7 @@ class PlansController {
         where: {
           plan_id: plan.id
         },
-        attributes: ['id', 'weekday', 'meal_type', 'recipe_id']
+        attributes: ['id', 'weekday', 'meal_type', 'recipe_id', 'meal_order']
       });
 
       // Put the meals inside the plan
@@ -160,7 +164,7 @@ class PlansController {
     data.name = data.name.toLowerCase();
     
     // Update the plan with the specific id
-    let plan = filterProps(data, ['name']);
+    const plan = filterProps(data, ['name']);
     const plan_id = ctx.params.plan_id;
     plan.user_id = ctx.user.id;
     await this.Plan.update(plan, {
@@ -195,7 +199,7 @@ class PlansController {
       where: {
         plan_id: updatedPlan.id
       },
-      attributes: ['id', 'weekday', 'meal_type', 'recipe_id']
+      attributes: ['id', 'weekday', 'meal_type', 'recipe_id', 'meal_order']
     });
 
     // Put the updatedMeals inside the plan

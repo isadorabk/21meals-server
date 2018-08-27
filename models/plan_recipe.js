@@ -16,6 +16,10 @@ module.exports = (sequelize, DataTypes) => {
     meal_type: {
       allowNull: false,
       type: DataTypes.STRING
+    },
+    meal_order: {
+      allowNull: false,
+      type: DataTypes.INTEGER
     }
   }, {
     underscored: true

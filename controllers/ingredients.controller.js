@@ -36,7 +36,7 @@ class IngredientsController {
         // If there's no ingredient, create a new one
         ingredient = filterProps(data, ['name', 'ingredient_type_id']);
         const newIngredient = await this.Ingredient.create(ingredient);
-        let res = filterProps(newIngredient.dataValues, ['id', 'name']);
+        const res = filterProps(newIngredient.dataValues, ['id', 'name']);
 
         // Find name of the ingredient type
         const ingredient_type = await db.Ingredient_type.findOne({

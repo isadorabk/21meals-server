@@ -5,6 +5,7 @@ const atob = require('atob');
 const jwt = require('jsonwebtoken');
 const filterProps = require('../services/utils.js').filterProps;
 const db = require('../models').db;
+const firstPlan = require('../services/firstPlan').firstPlan;
 
 class UsersController {
   constructor (userModel) {
@@ -46,11 +47,29 @@ class UsersController {
         const { hash_password, updated_at, created_at, ...res } = newUser.dataValues;
         // token expires in 30 days
         const token = jwt.sign({
-          id: res.id
+          id: res.id,
         }, process.env.JWT_SECRET, {
           expiresIn: 2592000
         });
         res.token = token;
+
+        // Create first empty plan for the user
+        const plan = filterProps(firstPlan, ['name']);
+        plan.user_id = res.id;
+        const newPlan = await db.Plan.create(plan);
+
+        // Create plan_recipe for each meal
+        const meals = firstPlan.meals;
+        await Promise.all(meals.map(async (meal) => {
+          const planRecipe = {
+            ...meal,
+            plan_id: newPlan.dataValues.id,
+          };
+          await db.Plan_recipe.create(planRecipe);
+        }));
+
+        res.plan_id = newPlan.dataValues.id;
+
         ctx.body = res;
         ctx.status = 201;
       }
@@ -85,11 +104,21 @@ class UsersController {
         const { hash_password, ...res } = user.dataValues;
         // token expires in 30 days
         const token = jwt.sign({
-          id: res.id
+          id: res.id,
         }, process.env.JWT_SECRET, {
           expiresIn: 2592000
         });
         res.token = token;
+
+        // get first plan id
+        const firstPlan = await db.Plan.findOne({
+          where: {
+            user_id: res.id
+          },
+          attributes: ['id']
+        });
+        res.plan_id = firstPlan.dataValues.id;
+
         ctx.body = res;
         ctx.status = 200;
       } else {
