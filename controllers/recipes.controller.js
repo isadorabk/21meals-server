@@ -30,7 +30,7 @@ class RecipesController {
       });
       // if there's already a recipe, send an error
       if (recipe) {
-        ctx.status = 401;
+        ctx.status = 403;
         ctx.body = {
           errors: ['Recipe already exists.']
         };

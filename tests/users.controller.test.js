@@ -24,7 +24,7 @@ jest.mock('bcrypt', () => ({
   hash: jest.fn()
 }));
 
-describe('User controller', () => {
+describe('Users controller', () => {
   beforeEach(() => ctx = {});
 
   describe('getUser()', () => {
@@ -71,7 +71,8 @@ describe('User controller', () => {
     test('should send status 406 if an email is not provide', async () => {
       ctx.method = 'POST';
       ctx.request = {
-        body: {...mockData.createUser}
+        body: { ...mockData.mockNewUser
+        }
       };
       delete ctx.request.body.email;
       await usersController.createUser(ctx, next);
