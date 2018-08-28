@@ -78,12 +78,12 @@ For the client repo, please visit: [21Meals - client](https://github.com/isadora
 
 
 
-1. ### Postman collection
+2. ### Postman collection
 
    Use the [21Meals.postman_collection.json](https://github.com/isadorabk/21meals-server/blob/develop/_docs/21meals.postman_collection.json) to test all API endpoints.
 
 
-1. ### Set up the front end
+3. ### Set up the front end
 
    Go to [21Meals - client](https://github.com/isadorabk/21meals-client) and follow the instructions in the README.md file.
 
