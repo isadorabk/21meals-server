@@ -46,19 +46,19 @@ For the client repo, please visit: [21Meals - client](https://github.com/isadora
    In the terminal, run:
 
    ```
-   $ mysql --password -u root
+   $ mysql --password -u <your username>
    ```
 
 
 
-   When prompted, enter the mySQL password.
+   When prompted, enter your mySQL password.
 
 
 
-   Now create a new database called "21meals_db" (or the name that you want):
+   Now create a new database:
 
    ```
-   $ CREATE DATABASE 21meals_db;
+   $ CREATE DATABASE <database name>;
    ```
 
 4. #### Set up your .env file
